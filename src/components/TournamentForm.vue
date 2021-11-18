@@ -1,14 +1,37 @@
 <template>
-  <form @submit.prevent="startMatchMaking" class="flex gap-2">
+  <form @submit.prevent="startMatchMaking" class="flex flex-col w-40 gap-2">
     <label for="team_count"> Choose the number of teams participating</label>
     <select v-model="teamCount" class="bg-red-200">
-      <option v-for="n in 19">{{ n + 1 }}</option>
+      <option v-for="n in 31">{{ n + 1 }}</option>
     </select>
-    <label for="match_count"></label>
+    <label for="match_count">Games agains each other</label>
     <select v-model="ties" class="bg-red-200">
-      <option v-for="n in 4" class="bg-green-200">{{ n + 1 }}</option>
+      <option v-for="n in 4" class="bg-green-200">{{ n }}</option>
     </select>
-    <button type="submit" class="bg-blue-200 rounded-md p-2">
+    <div>
+      <span>Tournament mode</span>
+      <br />
+      <input type="radio" value="league" id="league" v-model="selectedMode" />
+      <label for="league"> League </label>
+      <br />
+      <input
+        type="radio"
+        value="groupknockout"
+        id="groupknockout"
+        v-model="selectedMode"
+      />
+      <label for="groupknockout"> Group + Knockout </label>
+      <br />
+      <input
+        type="radio"
+        value="knockout"
+        id="knockout"
+        v-model="selectedMode"
+      />
+      <label for="knockout"> Knockout </label>
+    </div>
+
+    <button type="submit" class="bg-blue-200 rounded-md p-2 m-2">
       Start MatchMaking
     </button>
   </form>
@@ -23,8 +46,17 @@ const emit = defineEmits({
 
 const teamCount = ref(null);
 const ties = ref(null);
+const selectedMode = ref(null);
 
 const startMatchMaking = () => {
-  emit("form-values", { teamCount: teamCount.value, ties: ties.value });
+  if (teamCount.value && ties.value && selectedMode.value) {
+    emit("form-values", {
+      teamCount: teamCount.value,
+      ties: ties.value,
+      selectedMode: selectedMode.value,
+    });
+  } else {
+    alert("Please fill the all the form values");
+  }
 };
 </script>

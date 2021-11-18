@@ -7,10 +7,11 @@
   </div>
   <tournament-form @form-values="receiveFormValues"></tournament-form>
   {{ formValues }}
+  {{ tournamentSpecs }}
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useMouse, useNow } from "@vueuse/core";
 import TournamentForm from "../components/TournamentForm.vue";
 
@@ -19,7 +20,13 @@ const { now, pause, resume } = useNow({ controls: true });
 
 const formValues = ref(null);
 
+const tournamentSpecs = computed(() => {
+  const totalGames =
+    ((formValues.value.teamCount * (formValues.value.teamCount - 1)) / 2) * formValues.value.ties;
+  return "The number of games played is " + totalGames;
+});
+
 const receiveFormValues = (payload) => {
-  formValues.value = payload
+  formValues.value = payload;
 };
 </script>
