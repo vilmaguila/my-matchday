@@ -6,10 +6,6 @@
   </div>
   <tournament-form @form-values="receiveFormValues"></tournament-form>
   {{ tournamentSpecs }}
-  {{ listOfTeams }}
-  <div v-for="team in listOfTeams">
-    {{ team }}
-  </div>
 </template>
 
 <script setup>
@@ -28,10 +24,6 @@ const tournamentSpecs = computed(() => {
     ((teamCount.value * (teamCount.value - 1)) / 2) *
     tiesBetween.value;
   return "The number of games played is " + totalGames;
-});
-
-const listOfTeams = computed(() => {
-  return [...Array(teamCount.value).keys()];
 });
 
 const receiveFormValues = (payload) => {

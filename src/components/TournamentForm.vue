@@ -1,11 +1,11 @@
 <template>
   <form @submit.prevent="startMatchMaking" class="flex flex-col w-40 gap-2">
     <label for="team_count"> Choose the number of teams participating</label>
-    <select v-model="teamCount" class="bg-red-200">
+    <select v-model.number="teamCount" class="bg-red-200">
       <option v-for="n in 31">{{ n + 1 }}</option>
     </select>
     <label for="match_count">Games agains each other</label>
-    <select v-model="ties" class="bg-red-200">
+    <select v-model.number="ties" class="bg-red-200">
       <option v-for="n in 4" class="bg-green-200">{{ n }}</option>
     </select>
     <div>
