@@ -41,12 +41,12 @@
 import { ref } from "vue";
 
 const emit = defineEmits({
-  formValues: {},
+  "form-values": null,
 });
 
-const teamCount = ref(null);
-const ties = ref(null);
-const selectedMode = ref(null);
+const teamCount = ref(2);
+const ties = ref(1);
+const selectedMode = ref('league');
 
 const startMatchMaking = () => {
   if (teamCount.value && ties.value && selectedMode.value) {
