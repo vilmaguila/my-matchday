@@ -1,24 +1,28 @@
 <template>
-  <form @submit.prevent="startMatchMaking" class="flex flex-col w-40 gap-2">
-    <label for="team_count"> Choose the number of teams participating</label>
-    <select v-model.number="teamCount" class="bg-red-200">
-      <option v-for="n in 31">{{ n + 1 }}</option>
-    </select>
-    <label for="match_count">Games agains each other</label>
-    <select v-model.number="ties" class="bg-red-200">
-      <option v-for="n in 4" class="bg-green-200">{{ n }}</option>
-    </select>
+  <form @submit.prevent="submitForm" class="flex flex-col w-40 gap-2">
+    <div>
+      <label for="team_count"> Choose the number of teams participating</label>
+      <select v-model.number="teamCount" class="bg-red-200">
+        <option v-for="n in 31">{{ n + 1 }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="match_count">Games agains each other</label>
+      <select v-model.number="tiesBetween" class="bg-red-200">
+        <option v-for="n in 4" class="bg-green-200">{{ n }}</option>
+      </select>
+    </div>
     <div>
       <span>Tournament mode</span>
       <br />
-      <input type="radio" value="league" id="league" v-model="selectedMode" />
+      <input type="radio" value="league" id="league" v-model="tournamentMode" />
       <label for="league"> League </label>
       <br />
       <input
         type="radio"
         value="groupknockout"
         id="groupknockout"
-        v-model="selectedMode"
+        v-model="tournamentMode"
       />
       <label for="groupknockout"> Group + Knockout </label>
       <br />
@@ -26,13 +30,13 @@
         type="radio"
         value="knockout"
         id="knockout"
-        v-model="selectedMode"
+        v-model="tournamentMode"
       />
       <label for="knockout"> Knockout </label>
     </div>
 
     <button type="submit" class="bg-blue-200 rounded-md p-2 m-2">
-      Start MatchMaking
+      Submit form data
     </button>
   </form>
 </template>
@@ -45,15 +49,15 @@ const emit = defineEmits({
 });
 
 const teamCount = ref(2);
-const ties = ref(1);
-const selectedMode = ref('league');
+const tiesBetween = ref(1);
+const tournamentMode = ref("league");
 
-const startMatchMaking = () => {
-  if (teamCount.value && ties.value && selectedMode.value) {
+const submitForm = () => {
+  if (teamCount.value && tiesBetween.value && tournamentMode.value) {
     emit("form-values", {
       teamCount: teamCount.value,
-      ties: ties.value,
-      selectedMode: selectedMode.value,
+      tiesBetween: tiesBetween.value,
+      tournamentMode: tournamentMode.value,
     });
   } else {
     alert("Please fill the all the form values");
