@@ -3,13 +3,14 @@
     <h1 class="text-center text-2xl">Tournament Schedule Generator</h1>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
-        <label for="tournament_name"> Tournament name </label>
+        <label for="tournament_name" :class="{'text-red-500': tournamentNameValidity === 'invalid'}"> Tournament name </label>
         <input
           type="text"
           id="tournament_name"
           v-model.trim="tournamentName"
           class="bg-gray-300 rounded-sm px-2 py-1"
           @blur="validateInput"
+          :class="{'border-2 border-red-500': tournamentNameValidity === 'invalid'}"
         />
         <p v-if="tournamentNameValidity === 'invalid'" class="text-red-500">Please enter a valid Tournament Name</p>
       </div>
