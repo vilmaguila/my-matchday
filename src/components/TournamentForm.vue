@@ -34,7 +34,14 @@
       />
       <label for="knockout"> Knockout </label>
     </div>
-
+    <div>
+      <input
+        v-for="(team, index) in teamList"
+        :placeholder="index"
+        type="text"
+        v-model="teamList[index]"
+      />
+    </div>
     <button type="submit" class="bg-blue-200 rounded-md p-2 m-2">
       Submit form data
     </button>
@@ -42,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const emit = defineEmits({
   "form-values": null,
@@ -51,6 +58,17 @@ const emit = defineEmits({
 const teamCount = ref(2);
 const tiesBetween = ref(1);
 const tournamentMode = ref("league");
+const teamList = ref(["1", "2"]);
+
+watch(teamCount, (count, prevCount) => {
+  if (count > prevCount) {
+    for (let step = 3; step <= count; step++) {
+      teamList.value.push(step);
+    }
+  } else {
+    teamList.value.splice(count)
+  }
+});
 
 const submitForm = () => {
   if (teamCount.value && tiesBetween.value && tournamentMode.value) {
@@ -58,6 +76,7 @@ const submitForm = () => {
       teamCount: teamCount.value,
       tiesBetween: tiesBetween.value,
       tournamentMode: tournamentMode.value,
+      teamList: teamList.value,
     });
   } else {
     alert("Please fill the all the form values");
