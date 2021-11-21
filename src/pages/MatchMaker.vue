@@ -1,23 +1,29 @@
 <template>
-  <tournament-form @form-values="setFormValues"></tournament-form>
-  {{ tournamentSpecs }}
+  <div class="flex flex-col items-center">
+    <tournament-form @form-values="setFormValues" class="w-1/2"></tournament-form>
+    {{ tournamentSpecs }}
+  </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 
-const teamCount = ref(2);
-const tiesBetween = ref(1);
+const tournamentName = ref(null)
+const teamCount = ref(null);
+const tiesBetween = ref(null);
 const tournamentMode = ref("league");
+const teamList = ref([]);
 
-const formValues = ref({})
+const formValues = ref({});
 
 const setFormValues = (payload) => {
-  teamCount.value = payload.teamCount
-  tiesBetween.value = payload.tiesBetween
-  tournamentMode.value = payload.tournamentMode
-}
+  tournamentName.value = payload.tournamentName;
+  teamCount.value = payload.teamCount;
+  tiesBetween.value = payload.tiesBetween;
+  tournamentMode.value = payload.tournamentMode;
+  teamList.value = payload.teamList;
+};
 
 const tournamentSpecs = computed(() => {
   const totalGames =
