@@ -3,16 +3,25 @@
     <h1 class="text-center text-2xl">Tournament Schedule Generator</h1>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
-        <label for="tournament_name" :class="{'text-red-500': tournamentNameValidity === 'invalid'}"> Tournament name </label>
+        <label
+          for="tournament_name"
+          :class="{ 'text-red-500': tournamentNameValidity === 'invalid' }"
+        >
+          Tournament name
+        </label>
         <input
           type="text"
           id="tournament_name"
           v-model.trim="tournamentName"
           class="bg-gray-300 rounded-sm px-2 py-1"
           @blur="validateInput"
-          :class="{'border-2 border-red-500': tournamentNameValidity === 'invalid'}"
+          :class="{
+            'border-2 border-red-500': tournamentNameValidity === 'invalid',
+          }"
         />
-        <p v-if="tournamentNameValidity === 'invalid'" class="text-red-500">Please enter a valid Tournament Name</p>
+        <p v-if="tournamentNameValidity === 'invalid'" class="text-red-500">
+          Please enter a valid Tournament Name
+        </p>
       </div>
       <div class="flex flex-col">
         <label for="team_count">
@@ -76,21 +85,27 @@
           class="bg-gray-300 py-1 px-2"
         />
       </div>
-      <button type="submit" class="bg-blue-200 rounded-md p-2 m-2">
-        Submit form data
-      </button>
+      <div>
+        <button
+          type="submit"
+          class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
+          :disabled="!formValidity"
+        >
+          Submit form data
+        </button>
+      </div>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 const emit = defineEmits({
   "form-values": null,
 });
 
-const tournamentName = ref('');
+const tournamentName = ref("");
 const teamCount = ref(2);
 const tiesBetween = ref(1);
 const tournamentMode = ref("league");
@@ -105,6 +120,14 @@ watch(teamCount, (count, prevCount) => {
     }
   } else {
     teamList.value.splice(count);
+  }
+});
+
+const formValidity = computed(() => {
+  if (tournamentNameValidity.value === "valid") {
+    return true;
+  } else {
+    return false;
   }
 });
 
