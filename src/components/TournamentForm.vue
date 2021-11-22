@@ -109,14 +109,14 @@ const tournamentName = ref("");
 const teamCount = ref(2);
 const tiesBetween = ref(1);
 const tournamentMode = ref("league");
-const teamList = ref(["1", "2"]);
+const teamList = ref(["Team 1", "Team 2"]);
 
 const tournamentNameValidity = ref("pending");
 
 watch(teamCount, (count, prevCount) => {
   if (count > prevCount) {
     for (let step = 3; step <= count; step++) {
-      teamList.value.push(step.toString());
+      teamList.value.push("Team " + step.toString());
     }
   } else {
     teamList.value.splice(count);

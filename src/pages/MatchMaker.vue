@@ -8,7 +8,8 @@
     <p v-if="!formSubmitted" class="text-red-500">
       Please submit tournament data
     </p>
-    <tournament-schedule v-else></tournament-schedule>
+    <tournament-schedule v-else :schedule="tournamentSchedule"></tournament-schedule>
+    <button @click="generateSchedule">Paina tästä</button>
   </div>
 </template>
 
@@ -22,6 +23,29 @@ const teamCount = ref(null);
 const tiesBetween = ref(null);
 const tournamentMode = ref("league");
 const teamList = ref([]);
+
+const tournamentSchedule = ref(null);
+
+const generateMatchweekObject = () => {
+  const matchweek = {
+    name: null,
+    matches: [],
+  };
+  return matchweek;
+};
+
+const generateMatchObject = (home, away) => {
+  const match = {
+    date: null,
+    homeTeam: home,
+    awayTeam: away,
+    score: {
+      home: null,
+      away: null,
+    },
+  };
+  return match;
+};
 
 const formSubmitted = ref(false);
 
@@ -39,4 +63,20 @@ const tournamentSpecs = computed(() => {
     ((teamCount.value * (teamCount.value - 1)) / 2) * tiesBetween.value;
   return "The number of games played is " + totalGames;
 });
+
+const generateSchedule = () => {
+  var result = teamList.value.flatMap((v, i) =>
+    teamList.value.slice(i + 1).map((w) => generateMatchObject(v, w))
+  );
+  tournamentSchedule.value = result;
+};
+
+const gS = () => {
+  function choose(arr, k, prefix=[]) {
+    if (k == 0) return [prefix];
+    return arr.flatMap((v, i) =>
+        choose(arr.slice(i+1), k-1, [...prefix, v])
+    );
+}
+}
 </script>
