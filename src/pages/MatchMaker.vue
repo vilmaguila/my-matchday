@@ -8,8 +8,12 @@
     <p v-if="!formSubmitted" class="text-red-500">
       Please submit tournament data
     </p>
-    <tournament-schedule v-else :schedule="tournamentSchedule"></tournament-schedule>
-    <button @click="generateSchedule">Paina tästä</button>
+    <tournament-schedule
+      v-else
+      :schedule="matchObjectPairs"
+    ></tournament-schedule>
+    <button @click="generateMatchObjectPairs">Paina tästä</button>
+    <button @click="generateMatchweekArrays">toinene</button>
   </div>
 </template>
 
@@ -24,7 +28,40 @@ const tiesBetween = ref(null);
 const tournamentMode = ref("league");
 const teamList = ref([]);
 
-const tournamentSchedule = ref(null);
+const generatedMatchWeeks = ref(null);
+const matchObjectPairs = ref(null);
+
+const generateMatchweekArrays = () => {
+  let matchWeeks = [];
+  for (let i = 0; i < teamCount.value - 1; i++) {
+    matchWeeks.push([]);
+  }
+  outerLoop:
+  for (const matchObject of matchObjectPairs.value) {
+    innerLoop:
+    for (const matchWeek of matchWeeks) {
+      console.log(matchObject);
+      console.log(matchWeek);
+      if (
+        matchWeek.some(
+          (m) =>
+            m.homeTeam === matchObject.homeTeam ||
+            m.awayTeam === matchObject.awayTeam ||
+            m.homeTeam === matchObject.awayTeam ||
+            m.awayTeam === matchObject.homeTeam
+        )
+      ) {
+        console.log("This week contains a team already");
+        continue innerLoop;
+      } else {
+        matchWeek.push(matchObject);
+        continue outerLoop;
+      }
+    }
+  }
+  console.log(matchWeeks);
+  generatedMatchWeeks.value = matchWeeks;
+};
 
 const generateMatchweekObject = () => {
   const matchweek = {
@@ -64,19 +101,21 @@ const tournamentSpecs = computed(() => {
   return "The number of games played is " + totalGames;
 });
 
-const generateSchedule = () => {
+const generateMatchObjectPairs = () => {
   var result = teamList.value.flatMap((v, i) =>
     teamList.value.slice(i + 1).map((w) => generateMatchObject(v, w))
   );
-  tournamentSchedule.value = result;
+  matchObjectPairs.value = result;
 };
 
+const gs2 = () => {};
+
 const gS = () => {
-  function choose(arr, k, prefix=[]) {
+  function choose(arr, k, prefix = []) {
     if (k == 0) return [prefix];
     return arr.flatMap((v, i) =>
-        choose(arr.slice(i+1), k-1, [...prefix, v])
+      choose(arr.slice(i + 1), k - 1, [...prefix, v])
     );
-}
-}
+  }
+};
 </script>
