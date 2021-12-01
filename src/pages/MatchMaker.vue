@@ -13,7 +13,7 @@
       :schedule="matchObjectPairs"
     ></tournament-schedule>
     <button @click="generateMatchObjectPairs">Paina tästä</button>
-    <button @click="generateMatchweekArrays">toinene</button>
+    <button @click="generateMatchweekArrays(teamList)">toinene</button>
   </div>
 </template>
 
@@ -31,36 +31,26 @@ const teamList = ref([]);
 const generatedMatchWeeks = ref(null);
 const matchObjectPairs = ref(null);
 
-const generateMatchweekArrays = () => {
-  let matchWeeks = [];
-  for (let i = 0; i < teamCount.value - 1; i++) {
-    matchWeeks.push([]);
+const generateMatchweekArrays = (teamList) => {
+  const matchWeekArray = []
+  let matchweeks = teamList.length - 1;
+  let matchups = teamList.length / 2;
+  if (teamList.length % 2 !== 0) {
+    matchweeks = teamList.length
+    // matchups = (teamList.length - 1) / 2
+    teamList.push("Bye week")
   }
-  outerLoop:
-  for (const matchObject of matchObjectPairs.value) {
-    innerLoop:
-    for (const matchWeek of matchWeeks) {
-      console.log(matchObject);
-      console.log(matchWeek);
-      if (
-        matchWeek.some(
-          (m) =>
-            m.homeTeam === matchObject.homeTeam ||
-            m.awayTeam === matchObject.awayTeam ||
-            m.homeTeam === matchObject.awayTeam ||
-            m.awayTeam === matchObject.homeTeam
-        )
-      ) {
-        console.log("This week contains a team already");
-        continue innerLoop;
-      } else {
-        matchWeek.push(matchObject);
-        continue outerLoop;
-      }
+  console.log(matchweeks)
+  console.log(matchups + " per week")
+  console.log(teamList)
+  for (let i = 1; i <= matchweeks; i++) {
+    console.log("week" + i)
+    for (let j = 0; j < matchups; j++) {
+      console.log(teamList[j] + " vs " + teamList[teamList.length-1-j])
     }
+    const popped = teamList.pop()
+    teamList.splice(1,0,popped)
   }
-  console.log(matchWeeks);
-  generatedMatchWeeks.value = matchWeeks;
 };
 
 const generateMatchweekObject = () => {

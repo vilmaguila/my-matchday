@@ -148,8 +148,14 @@ const submitForm = () => {
       tournamentMode: tournamentMode.value,
       teamList: teamList.value,
     });
+    tournamentName.value = ""
+    teamCount.value = 2
+    tiesBetween.value = 1
+    teamList.value = ["Team 1", "Team 2"]
+    tournamentNameValidity.value = 'pending'
   } else {
     alert("Please fill the all the form values");
   }
+
 };
 </script>
