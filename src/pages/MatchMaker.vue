@@ -40,9 +40,6 @@ const generateMatchweekArrays = (teamList) => {
     // matchups = (teamList.length - 1) / 2
     teamList.push("Bye week")
   }
-  console.log(matchweeks)
-  console.log(matchups + " per week")
-  console.log(teamList)
   for (let i = 1; i <= matchweeks; i++) {
     console.log("week" + i)
     for (let j = 0; j < matchups; j++) {
@@ -90,22 +87,4 @@ const tournamentSpecs = computed(() => {
     ((teamCount.value * (teamCount.value - 1)) / 2) * tiesBetween.value;
   return "The number of games played is " + totalGames;
 });
-
-const generateMatchObjectPairs = () => {
-  var result = teamList.value.flatMap((v, i) =>
-    teamList.value.slice(i + 1).map((w) => generateMatchObject(v, w))
-  );
-  matchObjectPairs.value = result;
-};
-
-const gs2 = () => {};
-
-const gS = () => {
-  function choose(arr, k, prefix = []) {
-    if (k == 0) return [prefix];
-    return arr.flatMap((v, i) =>
-      choose(arr.slice(i + 1), k - 1, [...prefix, v])
-    );
-  }
-};
 </script>
