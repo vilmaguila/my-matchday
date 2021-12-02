@@ -115,7 +115,7 @@ const tournamentNameValidity = ref("pending");
 
 watch(teamCount, (count, prevCount) => {
   if (count > prevCount) {
-    for (let step = 3; step <= count; step++) {
+    for (let step = prevCount + 1; step <= count; step++) {
       teamList.value.push("Team " + step.toString());
     }
   } else {
