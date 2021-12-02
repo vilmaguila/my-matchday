@@ -8,9 +8,7 @@
     <p v-if="!formSubmitted" class="text-red-500">
       Please submit tournament data
     </p>
-    <tournament-schedule
-      v-else
-    ></tournament-schedule>
+    <tournament-schedule v-else></tournament-schedule>
     <button @click="generateMatchweeksArray(teamList)">toinene</button>
   </div>
 </template>
@@ -29,51 +27,63 @@ const teamList = ref([]);
 const generatedMatchWeeks = ref(null);
 
 const generateMatchweeksArray = (teamList) => {
-  const matchWeeksArray = []
+  const matchWeeksArray = [];
   let matchweeks = teamList.length - 1;
   let matchups = teamList.length / 2;
   if (teamList.length % 2 !== 0) {
-    matchweeks = teamList.length
+    matchweeks = teamList.length;
     // matchups = (teamList.length - 1) / 2
-    teamList.push("Bye week")
+    teamList.push("BYE");
   }
   for (let i = 1; i <= matchweeks; i++) {
-    console.log("week" + i)
-    const week = []
+    const week = [];
+    const byeteams = [];
     for (let j = 0; j < matchups; j++) {
-      console.log(teamList[j] + " vs " + teamList[teamList.length-1-j])
-      const match = generateMatchObject(teamList[j], teamList[teamList.length-1-j])
-      week.push(match)
-      generateMatchweekObject("Matchweek " + i)
+      const match = generateMatchObject(
+        teamList[j],
+        teamList[teamList.length - 1 - j]
+      );
+      if (typeof match === "string") {
+        byeteams.push(match);
+      } else {
+        week.push(match);
+      }
     }
-    const matchweek = generateMatchweekObject('Matchweek ' + 1, week)
-    matchWeeksArray.push(matchweek)
-    const popped = teamList.pop()
-    teamList.splice(1,0,popped)
+    const matchweek = generateMatchweekObject("Matchweek " + 1, week, byeteams);
+    matchWeeksArray.push(matchweek);
+    const popped = teamList.pop();
+    teamList.splice(1, 0, popped);
   }
-  generatedMatchWeeks.value = matchWeeksArray
-  return matchWeeksArray
+  generatedMatchWeeks.value = matchWeeksArray;
+  return matchWeeksArray;
 };
 
-const generateMatchweekObject = (matchweekName, matchweekArray) => {
+const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
   const matchweek = {
     name: matchweekName,
     matches: matchweekArray,
+    byeteams: byeTeams
   };
   return matchweek;
 };
 
 const generateMatchObject = (home, away) => {
-  const match = {
-    date: null,
-    homeTeam: home,
-    awayTeam: away,
-    score: {
-      home: null,
-      away: null,
-    },
-  };
-  return match;
+  if (home === "BYE") {
+    return away;
+  } else if (away === "BYE") {
+    return home;
+  } else {
+    const match = {
+      date: null,
+      homeTeam: home,
+      awayTeam: away,
+      score: {
+        home: null,
+        away: null,
+      },
+    };
+    return match;
+  }
 };
 
 const formSubmitted = ref(false);
