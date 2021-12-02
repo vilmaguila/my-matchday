@@ -8,12 +8,8 @@
     <p v-if="!formSubmitted" class="text-red-500">
       Please submit tournament data
     </p>
-    <tournament-schedule
-      v-else
-      :schedule="matchObjectPairs"
-    ></tournament-schedule>
-    <button @click="generateMatchObjectPairs">Paina tästä</button>
-    <button @click="generateMatchweekArrays(teamList)">toinene</button>
+    <tournament-schedule v-else></tournament-schedule>
+    <button @click="generateMatchweeksArray(teamList)">toinene</button>
   </div>
 </template>
 
@@ -29,49 +25,65 @@ const tournamentMode = ref("league");
 const teamList = ref([]);
 
 const generatedMatchWeeks = ref(null);
-const matchObjectPairs = ref(null);
 
-const generateMatchweekArrays = (teamList) => {
-  const matchWeekArray = []
+const generateMatchweeksArray = (teamList) => {
+  const matchWeeksArray = [];
   let matchweeks = teamList.length - 1;
   let matchups = teamList.length / 2;
   if (teamList.length % 2 !== 0) {
-    matchweeks = teamList.length
+    matchweeks = teamList.length;
     // matchups = (teamList.length - 1) / 2
-    teamList.push("Bye week")
+    teamList.push("BYE");
   }
-  console.log(matchweeks)
-  console.log(matchups + " per week")
-  console.log(teamList)
   for (let i = 1; i <= matchweeks; i++) {
-    console.log("week" + i)
+    const week = [];
+    const byeteams = [];
     for (let j = 0; j < matchups; j++) {
-      console.log(teamList[j] + " vs " + teamList[teamList.length-1-j])
+      const match = generateMatchObject(
+        teamList[j],
+        teamList[teamList.length - 1 - j]
+      );
+      if (typeof match === "string") {
+        byeteams.push(match);
+      } else {
+        week.push(match);
+      }
     }
-    const popped = teamList.pop()
-    teamList.splice(1,0,popped)
+    const matchweek = generateMatchweekObject("Matchweek " + 1, week, byeteams);
+    matchWeeksArray.push(matchweek);
+    const popped = teamList.pop();
+    teamList.splice(1, 0, popped);
   }
+  generatedMatchWeeks.value = matchWeeksArray;
+  return matchWeeksArray;
 };
 
-const generateMatchweekObject = () => {
+const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
   const matchweek = {
-    name: null,
-    matches: [],
+    name: matchweekName,
+    matches: matchweekArray,
+    byeteams: byeTeams
   };
   return matchweek;
 };
 
 const generateMatchObject = (home, away) => {
-  const match = {
-    date: null,
-    homeTeam: home,
-    awayTeam: away,
-    score: {
-      home: null,
-      away: null,
-    },
-  };
-  return match;
+  if (home === "BYE") {
+    return away;
+  } else if (away === "BYE") {
+    return home;
+  } else {
+    const match = {
+      date: null,
+      homeTeam: home,
+      awayTeam: away,
+      score: {
+        home: null,
+        away: null,
+      },
+    };
+    return match;
+  }
 };
 
 const formSubmitted = ref(false);
@@ -90,22 +102,4 @@ const tournamentSpecs = computed(() => {
     ((teamCount.value * (teamCount.value - 1)) / 2) * tiesBetween.value;
   return "The number of games played is " + totalGames;
 });
-
-const generateMatchObjectPairs = () => {
-  var result = teamList.value.flatMap((v, i) =>
-    teamList.value.slice(i + 1).map((w) => generateMatchObject(v, w))
-  );
-  matchObjectPairs.value = result;
-};
-
-const gs2 = () => {};
-
-const gS = () => {
-  function choose(arr, k, prefix = []) {
-    if (k == 0) return [prefix];
-    return arr.flatMap((v, i) =>
-      choose(arr.slice(i + 1), k - 1, [...prefix, v])
-    );
-  }
-};
 </script>
