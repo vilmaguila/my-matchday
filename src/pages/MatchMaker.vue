@@ -10,10 +10,8 @@
     </p>
     <tournament-schedule
       v-else
-      :schedule="matchObjectPairs"
     ></tournament-schedule>
-    <button @click="generateMatchObjectPairs">Paina tästä</button>
-    <button @click="generateMatchweekArrays(teamList)">toinene</button>
+    <button @click="generateMatchweeksArray(teamList)">toinene</button>
   </div>
 </template>
 
@@ -29,10 +27,9 @@ const tournamentMode = ref("league");
 const teamList = ref([]);
 
 const generatedMatchWeeks = ref(null);
-const matchObjectPairs = ref(null);
 
-const generateMatchweekArrays = (teamList) => {
-  const matchWeekArray = []
+const generateMatchweeksArray = (teamList) => {
+  const matchWeeksArray = []
   let matchweeks = teamList.length - 1;
   let matchups = teamList.length / 2;
   if (teamList.length % 2 !== 0) {
@@ -42,18 +39,26 @@ const generateMatchweekArrays = (teamList) => {
   }
   for (let i = 1; i <= matchweeks; i++) {
     console.log("week" + i)
+    const week = []
     for (let j = 0; j < matchups; j++) {
       console.log(teamList[j] + " vs " + teamList[teamList.length-1-j])
+      const match = generateMatchObject(teamList[j], teamList[teamList.length-1-j])
+      week.push(match)
+      generateMatchweekObject("Matchweek " + i)
     }
+    const matchweek = generateMatchweekObject('Matchweek ' + 1, week)
+    matchWeeksArray.push(matchweek)
     const popped = teamList.pop()
     teamList.splice(1,0,popped)
   }
+  generatedMatchWeeks.value = matchWeeksArray
+  return matchWeeksArray
 };
 
-const generateMatchweekObject = () => {
+const generateMatchweekObject = (matchweekName, matchweekArray) => {
   const matchweek = {
-    name: null,
-    matches: [],
+    name: matchweekName,
+    matches: matchweekArray,
   };
   return matchweek;
 };
