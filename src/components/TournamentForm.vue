@@ -113,9 +113,10 @@ const teamList = ref(["Team 1", "Team 2"]);
 
 const tournamentNameValidity = ref("pending");
 
+// This is not working as expected and needs to be fixed
 watch(teamCount, (count, prevCount) => {
   if (count > prevCount) {
-    for (let step = 3; step <= count; step++) {
+    for (let step = prevCount + 1; step <= count; step++) {
       teamList.value.push("Team " + step.toString());
     }
   } else {
