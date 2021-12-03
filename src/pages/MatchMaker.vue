@@ -4,11 +4,8 @@
       @form-values="setFormValues"
       class="w-1/2 h-96 overflow-y-auto"
     ></tournament-form>
-    <p v-if="!formSubmitted" class="text-red-500">
-      Please submit tournament data
-    </p>
     <tournament-schedule
-      v-else
+      v-if="generatedMatchWeeks"
       :schedule="generatedMatchWeeks"
       class="w-1/2 h-96 overflow-y-auto"
     ></tournament-schedule>
