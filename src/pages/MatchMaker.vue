@@ -49,7 +49,7 @@ const generateMatchweeksArray = (teamList) => {
         week.push(match);
       }
     }
-    const matchweek = generateMatchweekObject("Matchweek " + 1, week, byeteams);
+    const matchweek = generateMatchweekObject("Matchweek " + i, week, byeteams);
     matchWeeksArray.push(matchweek);
     const popped = teamList.pop();
     teamList.splice(1, 0, popped);
