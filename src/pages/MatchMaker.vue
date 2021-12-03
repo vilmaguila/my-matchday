@@ -1,14 +1,17 @@
 <template>
-  <div class="flex flex-col items-center">
+  <div class="flex flex-row items-center">
     <tournament-form
       @form-values="setFormValues"
       class="w-1/2"
     ></tournament-form>
-    {{ tournamentSpecs }}
     <p v-if="!formSubmitted" class="text-red-500">
       Please submit tournament data
     </p>
-    <tournament-schedule v-else :schedule="generatedMatchWeeks"></tournament-schedule>
+    <tournament-schedule
+      v-else
+      :schedule="generatedMatchWeeks"
+      class="w-1/2"
+    ></tournament-schedule>
     <button @click="generateMatchweeksArray(teamList)">PRESS to PROCEED</button>
   </div>
 </template>
@@ -62,7 +65,7 @@ const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
   const matchweek = {
     name: matchweekName,
     matches: matchweekArray,
-    byeteams: byeTeams
+    byeteams: byeTeams,
   };
   return matchweek;
 };
@@ -78,8 +81,8 @@ const generateMatchObject = (home, away) => {
       homeTeam: home,
       awayTeam: away,
       score: {
-        home: null,
-        away: null,
+        home: 0,
+        away: 0,
       },
     };
     return match;
@@ -96,10 +99,4 @@ const setFormValues = (payload) => {
   teamList.value = payload.teamList;
   formSubmitted.value = true;
 };
-
-const tournamentSpecs = computed(() => {
-  const totalGames =
-    ((teamCount.value * (teamCount.value - 1)) / 2) * tiesBetween.value;
-  return "The number of games played is " + totalGames;
-});
 </script>

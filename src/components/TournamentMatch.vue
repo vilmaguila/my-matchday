@@ -1,6 +1,6 @@
 <template>
-  <div class="flex">
-    <div>{{ match.date }}</div>
+  <div class="flex bg-gray-200 border-black border place-content-evenly">
+    <div>Date: {{ match.date }}</div>
     <div>{{ match.homeTeam }}</div>
     <div>{{ match.score.home }}</div>
     -
