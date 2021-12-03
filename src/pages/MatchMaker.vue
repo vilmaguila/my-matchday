@@ -8,8 +8,8 @@
     <p v-if="!formSubmitted" class="text-red-500">
       Please submit tournament data
     </p>
-    <tournament-schedule v-else></tournament-schedule>
-    <button @click="generateMatchweeksArray(teamList)">toinene</button>
+    <tournament-schedule v-else :schedule="generatedMatchWeeks"></tournament-schedule>
+    <button @click="generateMatchweeksArray(teamList)">PRESS to PROCEED</button>
   </div>
 </template>
 
