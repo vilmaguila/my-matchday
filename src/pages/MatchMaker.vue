@@ -2,7 +2,7 @@
   <div class="flex flex-row items-center">
     <tournament-form
       @form-values="setFormValues"
-      class="w-1/2"
+      class="w-1/2 h-96 overflow-y-auto"
     ></tournament-form>
     <p v-if="!formSubmitted" class="text-red-500">
       Please submit tournament data
@@ -10,7 +10,7 @@
     <tournament-schedule
       v-else
       :schedule="generatedMatchWeeks"
-      class="w-1/2"
+      class="w-1/2 h-96 overflow-y-auto"
     ></tournament-schedule>
     <button @click="generateMatchweeksArray(teamList)">PRESS to PROCEED</button>
   </div>
