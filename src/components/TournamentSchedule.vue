@@ -5,15 +5,15 @@
       class="flex gap-2 flex-col"
       :matchweek="matchweek"
     >
-      <div v-for="match in matchweek.matches">
-        {{ match }}
-      </div>
+      <tournament-match v-for="match in matchweek.matches" :match="match">
+      </tournament-match>
     </tournament-matchweek>
   </div>
 </template>
 
 <script setup>
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
+import TournamentMatch from "../components/TournamentMatch.vue";
 const props = defineProps({
   schedule: {
     type: Array,
