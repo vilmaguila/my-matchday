@@ -9,6 +9,7 @@
       :schedule="generatedMatchWeeks"
       class="w-1/2 h-96 overflow-y-auto"
     ></tournament-schedule>
+    <tournament-standings :teams="teamList"></tournament-standings>
     <button @click="generateMatchweeksArray(teamList)">PRESS to PROCEED</button>
   </div>
 </template>
@@ -17,6 +18,7 @@
 import { ref, computed } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
+import TournamentStandings from "../components/TournamentStandings.vue";
 
 const tournamentName = ref(null);
 const teamCount = ref(null);
