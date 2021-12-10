@@ -28,7 +28,7 @@
           Choose the number of teams participating</label
         >
         <select
-          v-model.number="teamCount"
+          v-model.number="tournamentTeamCount"
           class="bg-gray-300 rounded-sm px-2 py-1"
         >
           <option v-for="n in 31">{{ n + 1 }}</option>
@@ -37,7 +37,7 @@
       <div class="flex flex-col">
         <label for="match_count">Games agains each other</label>
         <select
-          v-model.number="tiesBetween"
+          v-model.number="tournamentRounds"
           class="bg-gray-300 rounded-sm px-2 py-1"
         >
           <option v-for="n in 4" class="bg-green-200">{{ n }}</option>
@@ -106,14 +106,14 @@ const emit = defineEmits({
 });
 
 const tournamentName = ref("");
-const teamCount = ref(2);
-const tiesBetween = ref(1);
+const tournamentTeamCount = ref(2);
+const tournamentRounds = ref(1);
 const tournamentMode = ref("league");
 const teamList = ref(["Team 1", "Team 2"]);
 
 const tournamentNameValidity = ref("pending");
 
-watch(teamCount, (count, prevCount) => {
+watch(tournamentTeamCount, (count, prevCount) => {
   if (count > prevCount) {
     for (let step = prevCount + 1; step <= count; step++) {
       teamList.value.push("Team " + step.toString());
@@ -140,22 +140,25 @@ const validateInput = () => {
 };
 
 const submitForm = () => {
-  if (teamCount.value && tiesBetween.value && tournamentMode.value) {
+  if (
+    tournamentTeamCount.value &&
+    tournamentRounds.value &&
+    tournamentMode.value
+  ) {
     emit("form-values", {
       tournamentName: tournamentName.value,
-      teamCount: teamCount.value,
-      tiesBetween: tiesBetween.value,
+      tournamentTeamCount: tournamentTeamCount.value,
+      tournamentRounds: tournamentRounds.value,
       tournamentMode: tournamentMode.value,
       teamList: teamList.value,
     });
-    tournamentName.value = ""
-    teamCount.value = 2
-    tiesBetween.value = 1
-    teamList.value = ["Team 1", "Team 2"]
-    tournamentNameValidity.value = 'pending'
+    tournamentName.value = "";
+    tournamentTeamCount.value = 2;
+    tournamentRounds.value = 1;
+    teamList.value = ["Team 1", "Team 2"];
+    tournamentNameValidity.value = "pending";
   } else {
     alert("Please fill the all the form values");
   }
-
 };
 </script>
