@@ -29,10 +29,10 @@ const generatedMatchWeeks = ref(null);
 const generateMatchweeksArray = (teamList) => {
   const matchWeeksArray = [];
   const localTeamList = [...teamList];
-  let matchweeks = localTeamList.length - 1;
-
+  let matchweeks =
+    (localTeamList.length - 1) * activeTournament.value.tournamentRounds;
   if (localTeamList.length % 2 !== 0) {
-    matchweeks = localTeamList.length;
+    matchweeks = localTeamList.length * activeTournament.value.tournamentRounds;
     localTeamList.push("BYE");
   }
   let matchups = localTeamList.length / 2;
