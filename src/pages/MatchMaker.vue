@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row items-center">
     <tournament-form
-      @form-values="setFormValues"
+      @form-values="createTournamentObject"
       class="w-1/2 h-96 overflow-y-auto"
     ></tournament-form>
     <tournament-schedule
@@ -9,50 +9,63 @@
       :schedule="generatedMatchWeeks"
       class="w-1/2 h-96 overflow-y-auto"
     ></tournament-schedule>
-    <button @click="generateMatchweeksArray(teamList)">PRESS to PROCEED</button>
+    <button @click="generateMatchweeksArray(activeTournament.teamList)">
+      PRESS to PROCEED
+    </button>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, reactive } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
 
-const tournamentName = ref(null);
-const teamCount = ref(null);
-const tiesBetween = ref(null);
-const tournamentMode = ref("league");
-const teamList = ref([]);
+const listOfTournaments = ref([]);
+
+const activeTournament = ref(null);
 
 const generatedMatchWeeks = ref(null);
 
 const generateMatchweeksArray = (teamList) => {
   const matchWeeksArray = [];
-  let matchweeks = teamList.length - 1;
-  let matchups = teamList.length / 2;
-  if (teamList.length % 2 !== 0) {
-    matchweeks = teamList.length;
-    // matchups = (teamList.length - 1) / 2
-    teamList.push("BYE");
+  const localTeamList = [...teamList];
+  let matchweeks = localTeamList.length - 1;
+
+  if (localTeamList.length % 2 !== 0) {
+    matchweeks = localTeamList.length;
+    localTeamList.push("BYE");
   }
+  let matchups = localTeamList.length / 2;
   for (let i = 1; i <= matchweeks; i++) {
     const week = [];
     const byeteams = [];
     for (let j = 0; j < matchups; j++) {
-      const match = generateMatchObject(
-        teamList[j],
-        teamList[teamList.length - 1 - j]
-      );
-      if (typeof match === "string") {
-        byeteams.push(match);
+      if (i % 2) {
+        const match = generateMatchObject(
+          localTeamList[j],
+          localTeamList[localTeamList.length - 1 - j]
+        );
+        if (typeof match === "string") {
+          byeteams.push(match);
+        } else {
+          week.push(match);
+        }
       } else {
-        week.push(match);
+        const match = generateMatchObject(
+          localTeamList[localTeamList.length - 1 - j],
+          localTeamList[j]
+        );
+        if (typeof match === "string") {
+          byeteams.push(match);
+        } else {
+          week.push(match);
+        }
       }
     }
     const matchweek = generateMatchweekObject("Matchweek " + i, week, byeteams);
     matchWeeksArray.push(matchweek);
-    const popped = teamList.pop();
-    teamList.splice(1, 0, popped);
+    const popped = localTeamList.pop();
+    localTeamList.splice(1, 0, popped);
   }
   generatedMatchWeeks.value = matchWeeksArray;
   return matchWeeksArray;
@@ -88,12 +101,16 @@ const generateMatchObject = (home, away) => {
 
 const formSubmitted = ref(false);
 
-const setFormValues = (payload) => {
-  tournamentName.value = payload.tournamentName;
-  teamCount.value = payload.teamCount;
-  tiesBetween.value = payload.tiesBetween;
-  tournamentMode.value = payload.tournamentMode;
-  teamList.value = payload.teamList;
+const createTournamentObject = (payload) => {
+  activeTournament.value = reactive({
+    tournamentName: payload.tournamentName,
+    tournamentTeamCount: payload.tournamentTeamCount,
+    tournamentRounds: payload.tournamentRounds,
+    tournamentMode: payload.tournamentMode,
+    teamList: payload.teamList,
+    tournamentSchedule: null,
+    tournamentStandings: null,
+  });
   formSubmitted.value = true;
 };
 </script>
