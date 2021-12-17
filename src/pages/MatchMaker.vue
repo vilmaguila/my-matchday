@@ -9,8 +9,10 @@
       :schedule="generatedMatchWeeks"
       class="w-1/2 h-96 overflow-y-auto"
     ></tournament-schedule>
-    <tournament-standings :teams="teamList"></tournament-standings>
-    <button @click="generateMatchweeksArray(teamList)">PRESS to PROCEED</button>
+    <tournament-standings
+      v-if="activeTournament"
+      :teams="activeTournament.teamList"
+    ></tournament-standings>
     <button @click="generateMatchweeksArray(activeTournament.teamList)">
       PRESS to PROCEED
     </button>
@@ -91,8 +93,8 @@ const generateMatchObject = (home, away) => {
   } else {
     const match = {
       date: null,
-      homeTeam: home,
-      awayTeam: away,
+      homeTeam: home.name,
+      awayTeam: away.name,
       score: {
         home: 0,
         away: 0,
