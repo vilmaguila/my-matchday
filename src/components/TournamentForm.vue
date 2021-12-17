@@ -167,7 +167,10 @@ const submitForm = () => {
     tournamentName.value = "";
     tournamentTeamCount.value = 2;
     tournamentRounds.value = 1;
-    teamList.value = ["Team 1", "Team 2"];
+    teamList.value = [
+      { name: "Team 1", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
+      { name: "Team 2", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
+    ];
     tournamentNameValidity.value = "pending";
   } else {
     alert("Please fill the all the form values");
