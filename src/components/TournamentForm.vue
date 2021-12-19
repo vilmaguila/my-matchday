@@ -81,7 +81,7 @@
           v-for="(team, index) in teamList"
           :placeholder="index"
           type="text"
-          v-model="teamList[index]"
+          v-model="teamList[index].name"
           class="bg-gray-300 py-1 px-2"
         />
       </div>
@@ -109,14 +109,26 @@ const tournamentName = ref("");
 const tournamentTeamCount = ref(2);
 const tournamentRounds = ref(1);
 const tournamentMode = ref("league");
-const teamList = ref(["Team 1", "Team 2"]);
+const teamList = ref([
+  { name: "Team 1", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
+  { name: "Team 2", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
+]);
 
 const tournamentNameValidity = ref("pending");
 
 watch(tournamentTeamCount, (count, prevCount) => {
   if (count > prevCount) {
     for (let step = prevCount + 1; step <= count; step++) {
-      teamList.value.push("Team " + step.toString());
+      teamList.value.push({
+        name: "Team " + step.toString(),
+        W: 0,
+        T: 0,
+        L: 0,
+        PTS: 0,
+        G: 0,
+        A: 0,
+        DIFF: 0,
+      });
     }
   } else {
     teamList.value.splice(count);
@@ -155,7 +167,10 @@ const submitForm = () => {
     tournamentName.value = "";
     tournamentTeamCount.value = 2;
     tournamentRounds.value = 1;
-    teamList.value = ["Team 1", "Team 2"];
+    teamList.value = [
+      { name: "Team 1", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
+      { name: "Team 2", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
+    ];
     tournamentNameValidity.value = "pending";
   } else {
     alert("Please fill the all the form values");

@@ -2,13 +2,18 @@
   <div class="flex flex-row items-center">
     <tournament-form
       @form-values="createTournamentObject"
-      class="w-1/2 h-96 overflow-y-auto"
+      class="w-1/3 h-96 overflow-y-auto"
     ></tournament-form>
     <tournament-schedule
       v-if="generatedMatchWeeks"
       :schedule="generatedMatchWeeks"
-      class="w-1/2 h-96 overflow-y-auto"
+      class="w-1/3 h-96 overflow-y-auto"
     ></tournament-schedule>
+    <tournament-standings
+      v-if="activeTournament"
+      :teams="activeTournament.teamList"
+      class="w-1/3 h-96 overflow-y-auto"
+    ></tournament-standings>
     <button @click="generateMatchweeksArray(activeTournament.teamList)">
       PRESS to PROCEED
     </button>
@@ -19,6 +24,7 @@
 import { ref, reactive } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
+import TournamentStandings from "../components/TournamentStandings.vue";
 
 const listOfTournaments = ref([]);
 
@@ -55,7 +61,7 @@ const generateMatchweeksArray = (teamList) => {
           localTeamList[localTeamList.length - 1 - j],
           localTeamList[j]
         );
-        if (typeof match === "string") {
+        if (!match.hasOwnProperty("score")) {
           byeteams.push(match);
         } else {
           week.push(match);
@@ -82,14 +88,14 @@ const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
 
 const generateMatchObject = (home, away) => {
   if (home === "BYE") {
-    return away;
+    return away.name;
   } else if (away === "BYE") {
-    return home;
+    return home.name;
   } else {
     const match = {
       date: null,
-      homeTeam: home,
-      awayTeam: away,
+      homeTeam: home.name,
+      awayTeam: away.name,
       score: {
         home: 0,
         away: 0,

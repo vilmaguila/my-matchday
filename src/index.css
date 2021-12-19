@@ -2,3 +2,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.standings-row {
+  @apply bg-gray-200 border-gray-300 border-4;
+}
+
+.standings-header {
+  @apply bg-gray-400;
+}
