@@ -10,24 +10,22 @@
     @click="isOpen = !isOpen"
   >
     <div>Date: {{ match.date }}</div>
-    <div>{{ match.homeTeam }}</div>
+    <div>{{ match.homeTeam.name }}</div>
     <div>{{ match.score.home }}</div>
     -
     <div>{{ match.score.away }}</div>
-    <div>{{ match.awayTeam }}</div>
+    <div>{{ match.awayTeam.name }}</div>
   </div>
   <div
     v-if="isOpen"
-    class="
-      flex
-      bg-gray-200
-      border-black border
-      place-content-evenly
-      cursor-pointer
-      h-12
-    "
+    class="flex bg-gray-200 border-black border place-content-evenly"
   >
-    Dropdown
+    <button
+      class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
+      @click="simulateMatch"
+    >
+      Simulate
+    </button>
   </div>
 </template>
 
@@ -41,5 +39,16 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits({
+  matchResult: {},
+});
+
 const isOpen = ref(false);
+const finalMatchResult = ref(null);
+
+const simulateMatch = () => {};
+
+const emitResult = () => {
+  emit("match-result", "matchresult");
+};
 </script>

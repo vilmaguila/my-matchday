@@ -94,8 +94,8 @@ const generateMatchObject = (home, away) => {
   } else {
     const match = {
       date: null,
-      homeTeam: home.name,
-      awayTeam: away.name,
+      homeTeam: home,
+      awayTeam: away,
       score: {
         home: 0,
         away: 0,
