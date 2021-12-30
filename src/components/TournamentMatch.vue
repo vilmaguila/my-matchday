@@ -9,11 +9,12 @@
     "
     @click="isOpen = !isOpen"
   >
+    <div>ID: {{ match.id }}</div>
     <div>Date: {{ match.date }}</div>
     <div>{{ match.homeTeam.name }}</div>
-    <div>{{ match.score.home }}</div>
+    <div>{{ homeScore }}</div>
     -
-    <div>{{ match.score.away }}</div>
+    <div>{{ awayScore }}</div>
     <div>{{ match.awayTeam.name }}</div>
   </div>
   <div
@@ -41,12 +42,31 @@ const props = defineProps({
 
 const emit = defineEmits({
   matchResult: {},
+  dispatchSimulation: {},
 });
 
 const isOpen = ref(false);
 const finalMatchResult = ref(null);
+const homeScore = ref(0);
+const awayScore = ref(0);
 
-const simulateMatch = () => {};
+const simulateMatch = () => {
+  // const homeGoals = Math.round(
+  //   (props.match.homeTeam.OFF / props.match.awayTeam.DEF) *
+  //     Math.random() *
+  //     (49 - -1) +
+  //     -1
+  // );
+  // const awayGoals = Math.round(
+  //   (props.match.awayTeam.OFF / props.match.homeTeam.DEF) *
+  //     Math.random() *
+  //     (49 - -1) +
+  //     -1
+  // );
+  // homeScore.value = homeGoals;
+  // awayScore.value = awayGoals;
+  emit("dispatch-simulation", props.match.id);
+};
 
 const emitResult = () => {
   emit("match-result", "matchresult");

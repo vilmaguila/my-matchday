@@ -87,12 +87,14 @@ const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
 };
 
 const generateMatchObject = (home, away) => {
+  const id = getMatchID();
   if (home === "BYE") {
     return away.name;
   } else if (away === "BYE") {
     return home.name;
   } else {
     const match = {
+      id: id,
       date: null,
       homeTeam: home,
       awayTeam: away,
@@ -103,6 +105,12 @@ const generateMatchObject = (home, away) => {
     };
     return match;
   }
+};
+
+let matchID = 0;
+const getMatchID = () => {
+  matchID += 1;
+  return matchID;
 };
 
 const formSubmitted = ref(false);
