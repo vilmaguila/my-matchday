@@ -6,8 +6,17 @@
     ></tournament-form>
     <tournament-schedule
       v-if="generatedMatchWeeks"
-      :schedule="generatedMatchWeeks"
       class="w-1/3 h-96 overflow-y-auto"
+      ><tournament-matchweek
+        v-for="matchweek in activeTournament.tournamentSchedule"
+        :matchweek="matchweek"
+      >
+        <tournament-match
+          v-for="match in matchweek.matches"
+          :match="match"
+          @dispatch-simulation="simulateMatch"
+        >
+        </tournament-match> </tournament-matchweek
     ></tournament-schedule>
     <tournament-standings
       v-if="activeTournament"
@@ -24,6 +33,8 @@
 import { ref, reactive } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
+import TournamentMatchweek from "../components/TournamentMatchweek.vue";
+import TournamentMatch from "../components/TournamentMatch.vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 
 const listOfTournaments = ref([]);
@@ -35,13 +46,13 @@ const generatedMatchWeeks = ref(null);
 const generateMatchweeksArray = (teamList) => {
   const matchWeeksArray = [];
   const localTeamList = [...teamList];
+  let matchups = localTeamList.length / 2;
   let matchweeks =
     (localTeamList.length - 1) * activeTournament.value.tournamentRounds;
   if (localTeamList.length % 2 !== 0) {
     matchweeks = localTeamList.length * activeTournament.value.tournamentRounds;
     localTeamList.push("BYE");
   }
-  let matchups = localTeamList.length / 2;
   for (let i = 1; i <= matchweeks; i++) {
     const week = [];
     const byeteams = [];
@@ -49,7 +60,9 @@ const generateMatchweeksArray = (teamList) => {
       if (i % 2) {
         const match = generateMatchObject(
           localTeamList[j],
-          localTeamList[localTeamList.length - 1 - j]
+          localTeamList[localTeamList.length - 1 - j],
+          i,
+          j
         );
         if (typeof match === "string") {
           byeteams.push(match);
@@ -59,7 +72,9 @@ const generateMatchweeksArray = (teamList) => {
       } else {
         const match = generateMatchObject(
           localTeamList[localTeamList.length - 1 - j],
-          localTeamList[j]
+          localTeamList[j],
+          i,
+          j
         );
         if (!match.hasOwnProperty("score")) {
           byeteams.push(match);
@@ -74,6 +89,7 @@ const generateMatchweeksArray = (teamList) => {
     localTeamList.splice(1, 0, popped);
   }
   generatedMatchWeeks.value = matchWeeksArray;
+  activeTournament.value.tournamentSchedule = matchWeeksArray;
   return matchWeeksArray;
 };
 
@@ -86,13 +102,13 @@ const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
   return matchweek;
 };
 
-const generateMatchObject = (home, away) => {
-  const id = getMatchID();
+const generateMatchObject = (home, away, week, matchid) => {
   if (home === "BYE") {
     return away.name;
   } else if (away === "BYE") {
     return home.name;
   } else {
+    const id = getMatchID();
     const match = {
       id: id,
       date: null,
