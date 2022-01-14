@@ -7,16 +7,13 @@
     <tournament-schedule
       v-if="generatedSchedule"
       class="w-1/3 h-96 overflow-y-auto"
-      ><tournament-matchweek
-        v-for="matchweek in activeTournament.tournamentSchedule"
-        :matchweek="matchweek"
+    >
+      <tournament-match
+        v-for="match in generatedSchedule"
+        :match="match"
+        @dispatch-simulation="simulateMatch"
       >
-        <tournament-match
-          v-for="match in matchweek.matches"
-          :match="match"
-          @dispatch-simulation="simulateMatch"
-        >
-        </tournament-match> </tournament-matchweek
+      </tournament-match
     ></tournament-schedule>
     <tournament-standings
       v-if="activeTournament"
@@ -74,7 +71,7 @@ const generateMatchesArray = (teamList) => {
           i
         );
         if (!match.hasOwnProperty("score")) {
-          byeteams.push(i, match);
+          byeteams.push({ i, match });
         } else {
           matchesArray.push(match);
         }
@@ -85,6 +82,7 @@ const generateMatchesArray = (teamList) => {
   }
   generatedSchedule.value = matchesArray;
   activeTournament.value.tournamentSchedule = matchesArray;
+  activeTournament.value.tournamentByeweeks = byeteams;
   return matchesArray;
 };
 
@@ -136,6 +134,7 @@ const createTournamentObject = (payload) => {
     teamList: payload.teamList,
     tournamentSchedule: null,
     tournamentStandings: null,
+    tournamentByeweeks: null,
   });
   formSubmitted.value = true;
 };

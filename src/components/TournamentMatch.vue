@@ -10,7 +10,7 @@
     @click="isOpen = !isOpen"
   >
     <div>ID: {{ match.id }}</div>
-    <div>Date: {{ match.date }}</div>
+    <div>Week: {{ match.round }}</div>
     <div>{{ match.homeTeam.name }}</div>
     <div>{{ homeScore }}</div>
     -
