@@ -11,7 +11,7 @@
       <tournament-match
         v-for="match in generatedSchedule"
         :match="match"
-        @dispatch-simulation="simulateMatch"
+        @dispatch-result="storeResult"
       >
       </tournament-match
     ></tournament-schedule>
@@ -86,14 +86,13 @@ const generateMatchesArray = (teamList) => {
   return matchesArray;
 };
 
-// const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
-//   const matchweek = {
-//     name: matchweekName,
-//     matches: matchweekArray,
-//     byeteams: byeTeams,
-//   };
-//   return matchweek;
-// };
+const storeResult = (payload) => {
+  const identifiedMatch = activeTournament.value.tournamentSchedule.find(
+    (match) => payload.id === match.id
+  );
+  identifiedMatch.score.home = payload.homeScore;
+  identifiedMatch.score.away = payload.awayScore;
+};
 
 const generateMatchObject = (home, away, round) => {
   if (home === "BYE") {

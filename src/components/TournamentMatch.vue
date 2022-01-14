@@ -12,9 +12,9 @@
     <div>ID: {{ match.id }}</div>
     <div>Week: {{ match.round }}</div>
     <div>{{ match.homeTeam.name }}</div>
-    <div>{{ homeScore }}</div>
+    <div>{{ match.score.home }}</div>
     -
-    <div>{{ awayScore }}</div>
+    <div>{{ match.score.away }}</div>
     <div>{{ match.awayTeam.name }}</div>
   </div>
   <div
@@ -41,34 +41,32 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-  matchResult: {},
-  dispatchSimulation: {},
+  "dispatch-result": {},
 });
 
 const isOpen = ref(false);
-const finalMatchResult = ref(null);
 const homeScore = ref(0);
 const awayScore = ref(0);
 
 const simulateMatch = () => {
-  // const homeGoals = Math.round(
-  //   (props.match.homeTeam.OFF / props.match.awayTeam.DEF) *
-  //     Math.random() *
-  //     (49 - -1) +
-  //     -1
-  // );
-  // const awayGoals = Math.round(
-  //   (props.match.awayTeam.OFF / props.match.homeTeam.DEF) *
-  //     Math.random() *
-  //     (49 - -1) +
-  //     -1
-  // );
-  // homeScore.value = homeGoals;
-  // awayScore.value = awayGoals;
-  emit("dispatch-result", props.match.id);
-};
-
-const emitResult = () => {
-  emit("match-result", "matchresult");
+  const homeGoals = Math.round(
+    (props.match.homeTeam.OFF / props.match.awayTeam.DEF) *
+      Math.random() *
+      (49 - -1) +
+      -1
+  );
+  const awayGoals = Math.round(
+    (props.match.awayTeam.OFF / props.match.homeTeam.DEF) *
+      Math.random() *
+      (49 - -1) +
+      -1
+  );
+  homeScore.value = homeGoals;
+  awayScore.value = awayGoals;
+  emit("dispatch-result", {
+    id: props.match.id,
+    homeScore: homeGoals,
+    awayScore: awayGoals,
+  });
 };
 </script>
