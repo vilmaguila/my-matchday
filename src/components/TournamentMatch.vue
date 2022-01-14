@@ -65,7 +65,7 @@ const simulateMatch = () => {
   // );
   // homeScore.value = homeGoals;
   // awayScore.value = awayGoals;
-  emit("dispatch-simulation", props.match.id);
+  emit("dispatch-result", props.match.id);
 };
 
 const emitResult = () => {

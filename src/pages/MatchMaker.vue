@@ -5,7 +5,7 @@
       class="w-1/3 h-96 overflow-y-auto"
     ></tournament-form>
     <tournament-schedule
-      v-if="generatedMatchWeeks"
+      v-if="generatedSchedule"
       class="w-1/3 h-96 overflow-y-auto"
       ><tournament-matchweek
         v-for="matchweek in activeTournament.tournamentSchedule"
@@ -23,7 +23,7 @@
       :teams="activeTournament.teamList"
       class="w-1/3 h-96 overflow-y-auto"
     ></tournament-standings>
-    <button @click="generateMatchweeksArray(activeTournament.teamList)">
+    <button @click="generateMatchesArray(activeTournament.teamList)">
       PRESS to PROCEED
     </button>
   </div>
@@ -41,68 +41,63 @@ const listOfTournaments = ref([]);
 
 const activeTournament = ref(null);
 
-const generatedMatchWeeks = ref(null);
+const generatedSchedule = ref(null);
 
-const generateMatchweeksArray = (teamList) => {
-  const matchWeeksArray = [];
+const generateMatchesArray = (teamList) => {
+  const matchesArray = [];
+  const byeteams = [];
   const localTeamList = [...teamList];
-  let matchups = localTeamList.length / 2;
-  let matchweeks =
+  let roundMatchups = localTeamList.length / 2;
+  let rounds =
     (localTeamList.length - 1) * activeTournament.value.tournamentRounds;
   if (localTeamList.length % 2 !== 0) {
-    matchweeks = localTeamList.length * activeTournament.value.tournamentRounds;
+    rounds = localTeamList.length * activeTournament.value.tournamentRounds;
     localTeamList.push("BYE");
   }
-  for (let i = 1; i <= matchweeks; i++) {
-    const week = [];
-    const byeteams = [];
-    for (let j = 0; j < matchups; j++) {
+  for (let i = 1; i <= rounds; i++) {
+    for (let j = 0; j < roundMatchups; j++) {
       if (i % 2) {
         const match = generateMatchObject(
           localTeamList[j],
           localTeamList[localTeamList.length - 1 - j],
-          i,
-          j
+          i
         );
         if (typeof match === "string") {
-          byeteams.push(match);
+          byeteams.push({ i, match });
         } else {
-          week.push(match);
+          matchesArray.push(match);
         }
       } else {
         const match = generateMatchObject(
           localTeamList[localTeamList.length - 1 - j],
           localTeamList[j],
-          i,
-          j
+          i
         );
         if (!match.hasOwnProperty("score")) {
-          byeteams.push(match);
+          byeteams.push(i, match);
         } else {
-          week.push(match);
+          matchesArray.push(match);
         }
       }
     }
-    const matchweek = generateMatchweekObject("Matchweek " + i, week, byeteams);
-    matchWeeksArray.push(matchweek);
     const popped = localTeamList.pop();
     localTeamList.splice(1, 0, popped);
   }
-  generatedMatchWeeks.value = matchWeeksArray;
-  activeTournament.value.tournamentSchedule = matchWeeksArray;
-  return matchWeeksArray;
+  generatedSchedule.value = matchesArray;
+  activeTournament.value.tournamentSchedule = matchesArray;
+  return matchesArray;
 };
 
-const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
-  const matchweek = {
-    name: matchweekName,
-    matches: matchweekArray,
-    byeteams: byeTeams,
-  };
-  return matchweek;
-};
+// const generateMatchweekObject = (matchweekName, matchweekArray, byeTeams) => {
+//   const matchweek = {
+//     name: matchweekName,
+//     matches: matchweekArray,
+//     byeteams: byeTeams,
+//   };
+//   return matchweek;
+// };
 
-const generateMatchObject = (home, away, week, matchid) => {
+const generateMatchObject = (home, away, round) => {
   if (home === "BYE") {
     return away.name;
   } else if (away === "BYE") {
@@ -111,6 +106,7 @@ const generateMatchObject = (home, away, week, matchid) => {
     const id = getMatchID();
     const match = {
       id: id,
+      round: round,
       date: null,
       homeTeam: home,
       awayTeam: away,
