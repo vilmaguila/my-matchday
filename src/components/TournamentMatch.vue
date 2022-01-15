@@ -63,10 +63,19 @@ const simulateMatch = () => {
   );
   homeScore.value = homeGoals;
   awayScore.value = awayGoals;
+  let winner = "draw";
+  if (homeScore.value > awayScore.value) {
+    winner = "home";
+  } else if (awayScore.value > homeScore.value) {
+    winner = "away";
+  } else {
+    winner = "draw";
+  }
   emit("dispatch-result", {
-    id: props.match.id,
+    match: props.match,
     homeScore: homeGoals,
     awayScore: awayGoals,
+    winner: winner,
   });
 };
 </script>

@@ -9,7 +9,7 @@
       class="w-1/3 h-96 overflow-y-auto"
     >
       <tournament-match
-        v-for="match in generatedSchedule"
+        v-for="match in activeTournament.tournamentSchedule"
         :match="match"
         @dispatch-result="storeResult"
       >
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
@@ -88,10 +88,27 @@ const generateMatchesArray = (teamList) => {
 
 const storeResult = (payload) => {
   const identifiedMatch = activeTournament.value.tournamentSchedule.find(
-    (match) => payload.id === match.id
+    (match) => payload.match.id === match.id
   );
   identifiedMatch.score.home = payload.homeScore;
   identifiedMatch.score.away = payload.awayScore;
+
+  const idHome = activeTournament.value.teamList.find(
+    (team) => team.name === payload.match.homeTeam.name
+  );
+  const idAway = activeTournament.value.teamList.find(
+    (team) => team.name === payload.match.awayTeam.name
+  );
+  if (payload.winner === "home") {
+    idHome.W += 1;
+    idAway.L += 1;
+  } else if (payload.winner === "away") {
+    idHome.L += 1;
+    idAway.W += 1;
+  } else {
+    idHome.T += 1;
+    idAway.T += 1;
+  }
 };
 
 const generateMatchObject = (home, away, round) => {
@@ -108,8 +125,8 @@ const generateMatchObject = (home, away, round) => {
       homeTeam: home,
       awayTeam: away,
       score: {
-        home: 0,
-        away: 0,
+        home: null,
+        away: null,
       },
     };
     return match;
@@ -131,7 +148,7 @@ const createTournamentObject = (payload) => {
     tournamentRounds: payload.tournamentRounds,
     tournamentMode: payload.tournamentMode,
     teamList: payload.teamList,
-    tournamentSchedule: null,
+    tournamentSchedule: [],
     tournamentStandings: null,
     tournamentByeweeks: null,
   });
