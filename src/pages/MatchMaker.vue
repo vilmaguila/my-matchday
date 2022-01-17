@@ -30,7 +30,6 @@
 import { ref, reactive, watch } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
-import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 import TournamentMatch from "../components/TournamentMatch.vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 
@@ -99,15 +98,29 @@ const storeResult = (payload) => {
   const idAway = activeTournament.value.teamList.find(
     (team) => team.name === payload.match.awayTeam.name
   );
-  if (payload.winner === "home") {
-    idHome.W += 1;
-    idAway.L += 1;
-  } else if (payload.winner === "away") {
-    idHome.L += 1;
-    idAway.W += 1;
+  const homeMatch = idHome.results.find(
+    (match) => match.id === payload.match.id
+  );
+  const awayMatch = idAway.results.find(
+    (match) => match.id === payload.match.id
+  );
+  if (homeMatch) {
+    const index = idHome.results.findIndex(
+      (match) => match.id === payload.match.id
+    );
+    idHome.results.splice(index, 1);
+    idHome.results.push(payload.match);
   } else {
-    idHome.T += 1;
-    idAway.T += 1;
+    idHome.results.push(payload.match);
+  }
+  if (awayMatch) {
+    const index = idAway.results.findIndex(
+      (match) => match.id === payload.match.id
+    );
+    idAway.results.splice(index, 1);
+    idAway.results.push(payload.match);
+  } else {
+    idAway.results.push(payload.match);
   }
 };
 

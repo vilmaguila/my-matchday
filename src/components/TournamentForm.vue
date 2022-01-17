@@ -144,26 +144,36 @@ const teamList = ref([
     W: 0,
     T: 0,
     L: 0,
-    PTS: 0,
+    PTS() {
+      return this.W * 3 + this.T;
+    },
     G: 0,
     A: 0,
-    DIFF: 0,
+    DIFF() {
+      return this.G - this.A;
+    },
     OVR: null,
     OFF: null,
     DEF: null,
+    results: [],
   },
   {
     name: "Team 2",
     W: 0,
     T: 0,
     L: 0,
-    PTS: 0,
+    PTS() {
+      return this.W * 3 + this.T;
+    },
     G: 0,
     A: 0,
-    DIFF: 0,
+    DIFF() {
+      return this.G - this.A;
+    },
     OVR: null,
     OFF: null,
     DEF: null,
+    results: [],
   },
 ]);
 
@@ -177,13 +187,18 @@ watch(tournamentTeamCount, (count, prevCount) => {
         W: 0,
         T: 0,
         L: 0,
-        PTS: 0,
+        PTS() {
+          return this.W * 3 + this.T;
+        },
         G: 0,
         A: 0,
-        DIFF: 0,
+        DIFF() {
+          return this.G - this.A;
+        },
         OVR: null,
         OFF: null,
         DEF: null,
+        results: [],
       });
     }
   } else {
@@ -243,26 +258,36 @@ const submitForm = () => {
         W: 0,
         T: 0,
         L: 0,
-        PTS: 0,
+        PTS() {
+          return this.W * 3 + this.T;
+        },
         G: 0,
         A: 0,
-        DIFF: 0,
+        DIFF() {
+          return this.G - this.A;
+        },
         OVR: null,
         OFF: null,
         DEF: null,
+        results: [],
       },
       {
         name: "Team 2",
         W: 0,
         T: 0,
         L: 0,
-        PTS: 0,
+        PTS() {
+          return this.W * 3 + this.T;
+        },
         G: 0,
         A: 0,
-        DIFF: 0,
+        DIFF() {
+          return this.G - this.A;
+        },
         OVR: null,
         OFF: null,
         DEF: null,
+        results: [],
       },
     ];
     tournamentNameValidity.value = "pending";

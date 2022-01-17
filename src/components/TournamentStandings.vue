@@ -19,10 +19,10 @@
           <td class="standings-row">{{ team.W }}</td>
           <td class="standings-row">{{ team.T }}</td>
           <td class="standings-row">{{ team.L }}</td>
-          <td class="standings-row">{{ team.PTS }}</td>
+          <td class="standings-row">{{ team.PTS() }}</td>
           <td class="standings-row">{{ team.G }}</td>
           <td class="standings-row">{{ team.A }}</td>
-          <td class="standings-row">{{ team.DIFF }}</td>
+          <td class="standings-row">{{ team.DIFF() }}</td>
         </tr>
       </tbody>
     </table>
