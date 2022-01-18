@@ -52,30 +52,36 @@ const simulateMatch = () => {
   const homeGoals = Math.round(
     (props.match.homeTeam.OFF / props.match.awayTeam.DEF) *
       Math.random() *
-      (49 - -1) +
+      (49 - 0) +
       -1
   );
   const awayGoals = Math.round(
     (props.match.awayTeam.OFF / props.match.homeTeam.DEF) *
       Math.random() *
-      (49 - -1) +
+      (49 - 0) +
       -1
   );
   homeScore.value = homeGoals;
   awayScore.value = awayGoals;
-  let winner = "draw";
+  let winner = "none";
+  let loser = "none";
+  let draw;
   if (homeScore.value > awayScore.value) {
-    winner = "home";
+    winner = props.match.homeTeam;
+    loser = props.match.awayTeam;
   } else if (awayScore.value > homeScore.value) {
-    winner = "away";
+    winner = props.match.awayTeam;
+    loser = props.match.homeTeam;
   } else {
-    winner = "draw";
+    draw = true;
   }
   emit("dispatch-result", {
     match: props.match,
     homeScore: homeGoals,
     awayScore: awayGoals,
     winner: winner,
+    loser: loser,
+    draw: draw,
   });
 };
 </script>

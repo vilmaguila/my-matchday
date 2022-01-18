@@ -4,6 +4,7 @@
       <thead class="text-left">
         <tr>
           <th class="standings-header pr-6">Team</th>
+          <th class="standings-header">G</th>
           <th class="standings-header">W</th>
           <th class="standings-header">T</th>
           <th class="standings-header">L</th>

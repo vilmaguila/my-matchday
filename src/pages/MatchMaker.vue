@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-center">
+  <div class="flex flex-row items-start">
     <tournament-form
       @form-values="createTournamentObject"
       class="w-96 h-96 overflow-y-auto"
@@ -17,7 +17,7 @@
     ></tournament-schedule>
     <tournament-standings
       v-if="activeTournament"
-      class="w-96 h-96 overflow-y-auto"
+      class="w-96 h-auto overflow-y-auto"
     >
       <team-item v-for="team in activeTournament.teamList" :team="team">
       </team-item>
@@ -144,6 +144,7 @@ const generateMatchObject = (home, away, round) => {
       awayTeam: away,
       winner: null,
       loser: null,
+      draw: null,
       score: {
         home: null,
         away: null,
