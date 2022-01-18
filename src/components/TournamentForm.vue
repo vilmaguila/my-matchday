@@ -144,14 +144,8 @@ const teamList = ref([
     W: 0,
     T: 0,
     L: 0,
-    PTS() {
-      return this.W * 3 + this.T;
-    },
     G: 0,
     A: 0,
-    DIFF() {
-      return this.G - this.A;
-    },
     OVR: null,
     OFF: null,
     DEF: null,
@@ -162,14 +156,8 @@ const teamList = ref([
     W: 0,
     T: 0,
     L: 0,
-    PTS() {
-      return this.W * 3 + this.T;
-    },
     G: 0,
     A: 0,
-    DIFF() {
-      return this.G - this.A;
-    },
     OVR: null,
     OFF: null,
     DEF: null,
@@ -187,14 +175,8 @@ watch(tournamentTeamCount, (count, prevCount) => {
         W: 0,
         T: 0,
         L: 0,
-        PTS() {
-          return this.W * 3 + this.T;
-        },
         G: 0,
         A: 0,
-        DIFF() {
-          return this.G - this.A;
-        },
         OVR: null,
         OFF: null,
         DEF: null,
@@ -258,14 +240,8 @@ const submitForm = () => {
         W: 0,
         T: 0,
         L: 0,
-        PTS() {
-          return this.W * 3 + this.T;
-        },
         G: 0,
         A: 0,
-        DIFF() {
-          return this.G - this.A;
-        },
         OVR: null,
         OFF: null,
         DEF: null,
@@ -276,14 +252,8 @@ const submitForm = () => {
         W: 0,
         T: 0,
         L: 0,
-        PTS() {
-          return this.W * 3 + this.T;
-        },
         G: 0,
         A: 0,
-        DIFF() {
-          return this.G - this.A;
-        },
         OVR: null,
         OFF: null,
         DEF: null,
