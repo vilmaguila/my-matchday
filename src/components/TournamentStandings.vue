@@ -4,6 +4,7 @@
       <thead class="text-left">
         <tr>
           <th class="standings-header pr-6">Team</th>
+          <th class="standings-header">G</th>
           <th class="standings-header">W</th>
           <th class="standings-header">T</th>
           <th class="standings-header">L</th>
@@ -14,16 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="team in teams">
-          <td class="standings-row">{{ team.name }}</td>
-          <td class="standings-row">{{ team.W }}</td>
-          <td class="standings-row">{{ team.T }}</td>
-          <td class="standings-row">{{ team.L }}</td>
-          <td class="standings-row">{{ team.PTS }}</td>
-          <td class="standings-row">{{ team.G }}</td>
-          <td class="standings-row">{{ team.A }}</td>
-          <td class="standings-row">{{ team.DIFF }}</td>
-        </tr>
+        <slot />
       </tbody>
     </table>
   </div>

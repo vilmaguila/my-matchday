@@ -76,14 +76,43 @@
         </div>
       </div>
       <div class="flex flex-col space-y-2">
-        <label for=""> Team Names </label>
-        <input
-          v-for="(team, index) in teamList"
-          :placeholder="index"
-          type="text"
-          v-model="teamList[index].name"
-          class="bg-gray-300 py-1 px-2"
-        />
+        <div class="flex space-x-3 wrap">
+          <div>Team Names</div>
+          <button
+            type="button"
+            class="bg-gray-700 text-white"
+            @click="generateTeamStrengths"
+          >
+            Generate team strengths
+          </button>
+        </div>
+
+        <div class="flex space-x-2" v-for="(team, index) in teamList">
+          <input
+            :placeholder="index"
+            type="text"
+            v-model="teamList[index].name"
+            class="bg-gray-300 py-1 px-2"
+          />
+          <input
+            placeholder="OVR"
+            type="text"
+            v-model.number="teamList[index].OVR"
+            class="bg-gray-300 py-1 px-2 w-10 text-xs"
+          />
+          <input
+            placeholder="OFF"
+            type="text"
+            v-model.number="teamList[index].OFF"
+            class="bg-gray-300 py-1 px-2 w-10 text-xs"
+          />
+          <input
+            placeholder="DEF"
+            type="text"
+            v-model.number="teamList[index].DEF"
+            class="bg-gray-300 py-1 px-2 w-10 text-xs"
+          />
+        </div>
       </div>
       <div>
         <button
@@ -110,8 +139,30 @@ const tournamentTeamCount = ref(2);
 const tournamentRounds = ref(1);
 const tournamentMode = ref("league");
 const teamList = ref([
-  { name: "Team 1", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
-  { name: "Team 2", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
+  {
+    name: "Team 1",
+    W: 0,
+    T: 0,
+    L: 0,
+    G: 0,
+    A: 0,
+    OVR: null,
+    OFF: null,
+    DEF: null,
+    results: [],
+  },
+  {
+    name: "Team 2",
+    W: 0,
+    T: 0,
+    L: 0,
+    G: 0,
+    A: 0,
+    OVR: null,
+    OFF: null,
+    DEF: null,
+    results: [],
+  },
 ]);
 
 const tournamentNameValidity = ref("pending");
@@ -124,10 +175,12 @@ watch(tournamentTeamCount, (count, prevCount) => {
         W: 0,
         T: 0,
         L: 0,
-        PTS: 0,
         G: 0,
         A: 0,
-        DIFF: 0,
+        OVR: null,
+        OFF: null,
+        DEF: null,
+        results: [],
       });
     }
   } else {
@@ -151,6 +204,20 @@ const validateInput = () => {
   }
 };
 
+const generateTeamStrengths = () => {
+  for (const team of teamList.value) {
+    team.OVR = Math.floor(
+      Math.random() * (Math.floor(95) - Math.ceil(65) + 1) + Math.ceil(65)
+    );
+    team.OFF = Math.floor(
+      Math.random() * (Math.floor(95) - Math.ceil(65) + 1) + Math.ceil(65)
+    );
+    team.DEF = Math.floor(
+      Math.random() * (Math.floor(95) - Math.ceil(65) + 1) + Math.ceil(65)
+    );
+  }
+};
+
 const submitForm = () => {
   if (
     tournamentTeamCount.value &&
@@ -168,8 +235,30 @@ const submitForm = () => {
     tournamentTeamCount.value = 2;
     tournamentRounds.value = 1;
     teamList.value = [
-      { name: "Team 1", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
-      { name: "Team 2", W: 0, T: 0, L: 0, PTS: 0, G: 0, A: 0, DIFF: 0 },
+      {
+        name: "Team 1",
+        W: 0,
+        T: 0,
+        L: 0,
+        G: 0,
+        A: 0,
+        OVR: null,
+        OFF: null,
+        DEF: null,
+        results: [],
+      },
+      {
+        name: "Team 2",
+        W: 0,
+        T: 0,
+        L: 0,
+        G: 0,
+        A: 0,
+        OVR: null,
+        OFF: null,
+        DEF: null,
+        results: [],
+      },
     ];
     tournamentNameValidity.value = "pending";
   } else {
