@@ -2,11 +2,11 @@
   <div class="flex flex-row items-center">
     <tournament-form
       @form-values="createTournamentObject"
-      class="w-1/3 h-96 overflow-y-auto"
+      class="w-96 h-96 overflow-y-auto"
     ></tournament-form>
     <tournament-schedule
       v-if="generatedSchedule"
-      class="w-1/3 h-96 overflow-y-auto"
+      class="w-96 h-96 overflow-y-auto"
     >
       <tournament-match
         v-for="match in activeTournament.tournamentSchedule"
@@ -17,9 +17,11 @@
     ></tournament-schedule>
     <tournament-standings
       v-if="activeTournament"
-      :teams="activeTournament.teamList"
-      class="w-1/3 h-96 overflow-y-auto"
-    ></tournament-standings>
+      class="w-96 h-96 overflow-y-auto"
+    >
+      <team-item v-for="team in activeTournament.teamList" :team="team">
+      </team-item>
+    </tournament-standings>
     <button @click="generateMatchesArray(activeTournament.teamList)">
       PRESS to PROCEED
     </button>
@@ -29,6 +31,7 @@
 <script setup>
 import { ref, reactive, watch } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
+import TeamItem from "../components/TeamItem.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
 import TournamentMatch from "../components/TournamentMatch.vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
@@ -91,6 +94,8 @@ const storeResult = (payload) => {
   );
   identifiedMatch.score.home = payload.homeScore;
   identifiedMatch.score.away = payload.awayScore;
+  identifiedMatch.winner = payload.winner;
+  identifiedMatch.loser = payload.loser;
 
   const idHome = activeTournament.value.teamList.find(
     (team) => team.name === payload.match.homeTeam.name
@@ -137,6 +142,8 @@ const generateMatchObject = (home, away, round) => {
       date: null,
       homeTeam: home,
       awayTeam: away,
+      winner: null,
+      loser: null,
       score: {
         home: null,
         away: null,
