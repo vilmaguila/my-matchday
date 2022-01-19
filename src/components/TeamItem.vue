@@ -30,7 +30,7 @@ const PTS = computed(() => {
 });
 
 const DIFF = computed(() => {
-  return props.team.G - props.team.A;
+  return S.value - A.value;
 });
 
 const W = computed(() => {
