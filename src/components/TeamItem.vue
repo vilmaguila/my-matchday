@@ -51,7 +51,23 @@ const L = computed(() => {
   }).length;
 });
 
-const S = computed(() => {});
+const S = computed(() => {
+  return props.team.results.reduce((acc, result) => {
+    if (result.homeTeam.name === props.team.name) {
+      return acc + result.score.home;
+    } else {
+      return acc + result.score.away;
+    }
+  }, 0);
+});
 
-const A = computed(() => {});
+const A = computed(() => {
+  return props.team.results.reduce((acc, result) => {
+    if (result.homeTeam.name === props.team.name) {
+      return acc + result.score.away;
+    } else {
+      return acc + result.score.home;
+    }
+  }, 0);
+});
 </script>
