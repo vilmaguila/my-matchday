@@ -35,19 +35,19 @@ const DIFF = computed(() => {
 
 const W = computed(() => {
   return props.team.results.filter((result) => {
-    return result.winner.name === props.team.name;
+    return result.result.winner.name === props.team.name;
   }).length;
 });
 
 const T = computed(() => {
   return props.team.results.filter((result) => {
-    return result.draw === true;
+    return result.result.draw === true;
   }).length;
 });
 
 const L = computed(() => {
   return props.team.results.filter((result) => {
-    return result.loser.name === props.team.name;
+    return result.result.loser.name === props.team.name;
   }).length;
 });
 
