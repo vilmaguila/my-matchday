@@ -15,17 +15,24 @@
         </tr>
       </thead>
       <tbody>
-        <slot />
+        <team-item v-for="team in teamsSorted" :team="team"> </team-item>
       </tbody>
     </table>
   </div>
 </template>
 
 <script setup>
+import TeamItem from "../components/TeamItem.vue";
+import { computed } from "vue";
+
 const props = defineProps({
   teams: {
     type: Array,
     default: [],
   },
+});
+
+const teamsSorted = computed(() => {
+  return props.teams.sort((a, b) => (a.W < b.W ? 1 : -1));
 });
 </script>
