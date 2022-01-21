@@ -7,14 +7,10 @@
     <tournament-schedule
       v-if="generatedSchedule"
       class="w-96 h-96 overflow-y-auto"
+      :schedule="activeTournament.tournamentSchedule"
+      @dispatch-result="storeResult"
     >
-      <tournament-match
-        v-for="match in activeTournament.tournamentSchedule"
-        :match="match"
-        @dispatch-result="storeResult"
-      >
-      </tournament-match
-    ></tournament-schedule>
+    </tournament-schedule>
     <tournament-standings
       v-if="activeTournament"
       class="w-96 h-auto overflow-y-auto"
@@ -31,7 +27,6 @@
 import { ref, reactive, watch } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
-import TournamentMatch from "../components/TournamentMatch.vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 
 const listOfTournaments = ref([]);
