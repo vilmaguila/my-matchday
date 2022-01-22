@@ -4,13 +4,6 @@
       @form-values="createTournamentObject"
       class="w-96 h-96 overflow-y-auto"
     ></tournament-form>
-    <tournament-schedule
-      v-if="generatedSchedule"
-      class="w-96 h-96 overflow-y-auto"
-      :schedule="activeTournament.tournamentSchedule"
-      @dispatch-result="storeResult"
-    >
-    </tournament-schedule>
     <tournament-standings
       v-if="activeTournament"
       class="w-96 h-auto overflow-y-auto"
@@ -20,6 +13,12 @@
     <button @click="generateMatchesArray(activeTournament.teamList)">
       PRESS to PROCEED
     </button>
+    <tournament-matchweek
+      class="w-96 h-96 overflow-y-auto"
+      v-if="activeTournament"
+      :matches="activeTournament.tournamentSchedule"
+      @dispatch-result="storeResult"
+    ></tournament-matchweek>
   </div>
 </template>
 
@@ -28,6 +27,7 @@ import { ref, reactive, watch } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
 import TournamentSchedule from "../components/TournamentSchedule.vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
+import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 
 const listOfTournaments = ref([]);
 
