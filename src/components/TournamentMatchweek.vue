@@ -20,6 +20,7 @@
     </tournament-match>
     <slot></slot>
     {{ selectedForSimulation }}
+    <button @click="dummyCall">Simulate selected</button>
   </div>
 </template>
 
@@ -39,6 +40,11 @@ const emit = defineEmits({
 });
 
 const selectedForSimulation = ref([])
+
+const dummyCall = () => {
+  alert("Sending array of ids for simulation")
+  selectedForSimulation.value.splice(0)
+}
 
 const dispatchResult = (payload) => {
   emit("dispatch-result", payload);
