@@ -17,15 +17,15 @@
       class="w-96 h-96 overflow-y-auto"
       v-if="activeTournament"
       :matches="activeTournament.tournamentSchedule"
+      :rounds="activeTournament.tournamentWeeks"
       @dispatch-result="storeResult"
     ></tournament-matchweek>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive } from "vue";
 import TournamentForm from "../components/TournamentForm.vue";
-import TournamentSchedule from "../components/TournamentSchedule.vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 
@@ -78,6 +78,7 @@ const generateMatchesArray = (teamList) => {
   generatedSchedule.value = matchesArray;
   activeTournament.value.tournamentSchedule = matchesArray;
   activeTournament.value.tournamentByeweeks = byeteams;
+  activeTournament.value.tournamentWeeks = rounds;
   return matchesArray;
 };
 
@@ -192,6 +193,7 @@ const createTournamentObject = (payload) => {
     tournamentSchedule: [],
     tournamentStandings: null,
     tournamentByeweeks: null,
+    tournamentWeeks: null,
   });
   formSubmitted.value = true;
 };

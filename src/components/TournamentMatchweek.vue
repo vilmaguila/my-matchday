@@ -33,27 +33,27 @@ const props = defineProps({
     type: Array,
     default: [],
   },
+  rounds: {},
 });
 
 const emit = defineEmits({
   "dispatch-result": {},
 });
 
-const selectedForSimulation = ref([])
+const selectedForSimulation = ref([]);
 
 const dummyCall = () => {
-  alert("Sending array of ids for simulation")
-  selectedForSimulation.value.splice(0)
-}
+  alert("Sending array of ids for simulation");
+  selectedForSimulation.value.splice(0);
+};
 
 const dispatchResult = (payload) => {
   emit("dispatch-result", payload);
 };
 
 const currentRound = ref(1);
-const maxRound = Math.max(...props.matches.map((item) => item.round), 0);
 const nextRound = () => {
-  if (currentRound.value < maxRound) currentRound.value += 1;
+  if (currentRound.value < props.rounds) currentRound.value += 1;
 };
 const previousRound = () => {
   if (currentRound.value < 2) return;
