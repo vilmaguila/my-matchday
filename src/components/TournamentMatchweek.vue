@@ -7,8 +7,19 @@
       v-for="match in filteredMatchweek"
       :match="match"
       @dispatch-result="dispatchResult"
-    />
+    >
+      <template #selected>
+        <input
+          type="checkbox"
+          :name="match.id"
+          :value="match.id"
+          :id="match.id"
+          v-model="selectedForSimulation"
+        />
+      </template>
+    </tournament-match>
     <slot></slot>
+    {{ selectedForSimulation }}
   </div>
 </template>
 
@@ -27,12 +38,14 @@ const emit = defineEmits({
   "dispatch-result": {},
 });
 
+const selectedForSimulation = ref([])
+
 const dispatchResult = (payload) => {
   emit("dispatch-result", payload);
 };
 
 const currentRound = ref(1);
-const maxRound = Math.max(...props.matches.map((item) => item.round));
+const maxRound = Math.max(...props.matches.map((item) => item.round), 0);
 const nextRound = () => {
   if (currentRound.value < maxRound) currentRound.value += 1;
 };

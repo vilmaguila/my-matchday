@@ -9,6 +9,7 @@
     "
     @click="isOpen = !isOpen"
   >
+    <slot name="selected"></slot>
     <div>ID: {{ match.id }}</div>
     <div>Week: {{ match.round }}</div>
     <div>{{ match.homeTeam.name }}</div>
@@ -16,17 +17,6 @@
     -
     <div>{{ match.score.away }}</div>
     <div>{{ match.awayTeam.name }}</div>
-  </div>
-  <div
-    v-if="isOpen"
-    class="flex bg-gray-200 border-black border place-content-evenly"
-  >
-    <button
-      class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
-      @click="simulateMatch"
-    >
-      Simulate
-    </button>
   </div>
 </template>
 
