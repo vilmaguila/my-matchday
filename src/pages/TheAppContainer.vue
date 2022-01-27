@@ -1,5 +1,5 @@
 <template>
-  <component :is="currentScreen" @update-screen="changeScreen" @change-screen="changeScreen"></component>
+  <component :is="currentScreen" :gameslot="activeGameSlot" @change-screen="changeScreen"></component>
 </template>
 
 <script setup>
@@ -8,8 +8,8 @@ import TheTournament from '../pages/TheTournament.vue'
 import TheMainMenu from '../pages/TheMainMenu.vue'
 import TheNewGameScreen from "./TheNewGameScreen.vue";
 
-const screens = ref([TheMainMenu, TheTournament]);
 const currentScreen = ref(TheMainMenu);
+const activeGameSlot = ref(null)
 
 const screenCoding = {
   'main-menu': TheMainMenu,
@@ -17,8 +17,9 @@ const screenCoding = {
   'the-tournament': TheTournament
 }
 
-const changeScreen = (screen) => {
-  currentScreen.value = screenCoding[screen];
+const changeScreen = (payload) => {
+  currentScreen.value = screenCoding[payload.screen];
+  activeGameSlot.value = payload.slot
 }
 
 </script>

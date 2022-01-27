@@ -29,6 +29,13 @@ import TournamentForm from "../components/TournamentForm.vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 
+const props = defineProps({
+  gameslot: {
+    type: Number,
+    required: true
+  }
+})
+
 const listOfTournaments = ref([]);
 
 const activeTournament = ref(null);
