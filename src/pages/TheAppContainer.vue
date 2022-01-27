@@ -1,6 +1,5 @@
 <template>
-  <button @click="changeTournament">Switch to other Screen</button>
-  <component :is="currentScreen" @update-screen="changeScreen"></component>
+  <component :is="currentScreen" @update-screen="changeScreen" @change-screen="changeScreen"></component>
 </template>
 
 <script setup>
@@ -12,13 +11,14 @@ import TheNewGameScreen from "./TheNewGameScreen.vue";
 const screens = ref([TheMainMenu, TheTournament]);
 const currentScreen = ref(TheMainMenu);
 
-const changeTournament = () => {
-  currentScreen.value = TheTournament
+const screenCoding = {
+  'main-menu': TheMainMenu,
+  'new-game-screen': TheNewGameScreen,
+  'the-tournament': TheTournament
 }
 
 const changeScreen = (screen) => {
-  alert("Got new screen: ", screen)
-  currentScreen.value = screen;
+  currentScreen.value = screenCoding[screen];
 }
 
 </script>

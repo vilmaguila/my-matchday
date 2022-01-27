@@ -122,6 +122,7 @@
         >
           Submit form data
         </button>
+        <button @click="changeScreen('main-menu')">Back to Main Menu</button>
       </div>
     </form>
   </div>
@@ -132,7 +133,12 @@ import { ref, watch, computed } from "vue";
 
 const emit = defineEmits({
   "form-values": null,
+  'change-screen': null,
 });
+
+const changeScreen = (screen) => {
+  emit('change-screen', screen)
+}
 
 const tournamentName = ref("");
 const tournamentTeamCount = ref(2);
