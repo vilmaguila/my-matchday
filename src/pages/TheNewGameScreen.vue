@@ -98,7 +98,7 @@
           class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
           :disabled="!formValidity"
         >Submit form data</button>
-        <button @click="changeScreen('main-menu')">Back to Main Menu</button>
+        <button @click="changeScreen({ screen: 'main-menu', slot: null })">Back to Main Menu</button>
       </div>
     </form>
   </div>
@@ -120,7 +120,7 @@ const emit = defineEmits({
 });
 
 const changeScreen = (screen) => {
-  emit('change-screen', screen, )
+  emit('change-screen', screen,)
 }
 
 const tournamentName = ref("");
