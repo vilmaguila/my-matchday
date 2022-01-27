@@ -1,9 +1,5 @@
 <template>
   <div class="flex flex-row items-start">
-    <tournament-form
-      @form-values="createTournamentObject"
-      class="w-96 h-96 overflow-y-auto"
-    ></tournament-form>
     <tournament-standings
       v-if="activeTournament"
       class="w-96 h-auto overflow-y-auto"
@@ -25,7 +21,6 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import TournamentForm from "../components/TournamentForm.vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 

@@ -26,15 +26,15 @@
 import { ref } from "vue";
 import GameSlot from "../components/GameSlot.vue";
 
+const props = defineProps({
+  gameSlots: {}
+})
+
 const emit = defineEmits({
   "update-screen": {},
 });
 
-const gameSlots = ref([
-  { slot: 1, gamedata: null },
-  { slot: 2, gamedata: null },
-  { slot: 3, gamedata: null },
-]);
+
 
 const changeScreen = (screen) => {
   emit("change-screen", screen);

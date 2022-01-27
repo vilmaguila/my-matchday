@@ -119,8 +119,15 @@ const emit = defineEmits({
   'change-screen': null,
 });
 
-const changeScreen = (screen) => {
-  emit('change-screen', screen,)
+const changeScreen = (payload) => {
+  emit('change-screen', payload)
+  emit("form-values", {
+      tournamentName: tournamentName.value,
+      tournamentTeamCount: tournamentTeamCount.value,
+      tournamentRounds: tournamentRounds.value,
+      tournamentMode: tournamentMode.value,
+      teamList: teamList.value,
+    });
 }
 
 const tournamentName = ref("");
