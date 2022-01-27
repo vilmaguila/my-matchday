@@ -1,14 +1,18 @@
 <template>
+  <button @click="changeTournament">Switch to other Screen</button>
   <component :is="currentScreen"></component>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
+import TheTournament from '../pages/TheTournament.vue'
+import TheMainMenu from '../pages/TheMainMenu.vue'
 
-const screens = ref(["TheMainMenu", "TheTournament"]);
-const currentScreen = ref("TheMainMenu");
+const screens = ref([TheMainMenu, TheTournament]);
+const currentScreen = ref(TheMainMenu);
 
-const currentScreenComponent = computed(() => {
-  return "the-" + currentScreen.value.toLowerCase();
-});
+const changeTournament = () => {
+  currentScreen.value = TheTournament
+}
+
 </script>
