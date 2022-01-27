@@ -6,9 +6,6 @@
       :teams="activeTournament.teamList"
     >
     </tournament-standings>
-    <button @click="generateMatchesArray(activeTournament.teamList)">
-      PRESS to PROCEED
-    </button>
     <tournament-matchweek
       class="w-96 h-96 overflow-y-auto"
       v-if="activeTournament"
@@ -20,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 
@@ -33,6 +30,12 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+});
+
+onMounted(() => {
+  if (!activeTournament.tournamentSchedule) {
+    generateMatchesArray(activeTournament.value.teamList);
+  }
 });
 
 const listOfTournaments = ref([]);
