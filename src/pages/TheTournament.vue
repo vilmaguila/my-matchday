@@ -1,4 +1,7 @@
 <template>
+  <button class="button" @click="changeScreen({ screen: 'main-menu' })">
+    Back to Main Menu
+  </button>
   <div class="flex flex-row items-start">
     <tournament-standings
       v-if="activeTournament"
@@ -32,17 +35,21 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits({
+  "change-screen": {},
+});
+
 onMounted(() => {
   if (!activeTournament.tournamentSchedule) {
     generateMatchesArray(activeTournament.value.teamList);
   }
 });
 
-const listOfTournaments = ref([]);
-
 const activeTournament = ref(props.gamedata.gamedata);
 
-const generatedSchedule = ref(null);
+const changeScreen = (payload) => {
+  emit("change-screen", payload);
+};
 
 const generateMatchesArray = (teamList) => {
   const matchesArray = [];
@@ -84,7 +91,6 @@ const generateMatchesArray = (teamList) => {
     const popped = localTeamList.pop();
     localTeamList.splice(1, 0, popped);
   }
-  generatedSchedule.value = matchesArray;
   activeTournament.value.tournamentSchedule = matchesArray;
   activeTournament.value.tournamentByeweeks = byeteams;
   activeTournament.value.tournamentWeeks = rounds;

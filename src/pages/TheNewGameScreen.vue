@@ -6,7 +6,8 @@
         <label
           for="tournament_name"
           :class="{ 'text-red-500': tournamentNameValidity === 'invalid' }"
-        >Name</label>
+          >Name</label
+        >
         <input
           type="text"
           id="tournament_name"
@@ -17,27 +18,37 @@
             'border-2 border-red-500': tournamentNameValidity === 'invalid',
           }"
         />
-        <p
-          v-if="tournamentNameValidity === 'invalid'"
-          class="text-red-500"
-        >Please enter a valid Tournament Name</p>
+        <p v-if="tournamentNameValidity === 'invalid'" class="text-red-500">
+          Please enter a valid Tournament Name
+        </p>
       </div>
       <div class="flex flex-col">
         <label for="team_count">Choose the number of teams participating</label>
-        <select v-model.number="tournamentTeamCount" class="bg-gray-300 rounded-sm px-2 py-1">
+        <select
+          v-model.number="tournamentTeamCount"
+          class="bg-gray-300 rounded-sm px-2 py-1"
+        >
           <option v-for="n in 31">{{ n + 1 }}</option>
         </select>
       </div>
       <div class="flex flex-col">
         <label for="match_count">Games agains each other</label>
-        <select v-model.number="tournamentRounds" class="bg-gray-300 rounded-sm px-2 py-1">
+        <select
+          v-model.number="tournamentRounds"
+          class="bg-gray-300 rounded-sm px-2 py-1"
+        >
           <option v-for="n in 4" class="bg-green-200">{{ n }}</option>
         </select>
       </div>
       <div class="flex flex-col">
         <label>Tournament mode</label>
         <div>
-          <input type="radio" value="league" id="league" v-model="tournamentMode" />
+          <input
+            type="radio"
+            value="league"
+            id="league"
+            v-model="tournamentMode"
+          />
           <label for="league">League</label>
         </div>
         <div>
@@ -51,7 +62,13 @@
           <label for="groupknockout">Group + Knockout</label>
         </div>
         <div>
-          <input type="radio" value="knockout" id="knockout" v-model="tournamentMode" disabled />
+          <input
+            type="radio"
+            value="knockout"
+            id="knockout"
+            v-model="tournamentMode"
+            disabled
+          />
           <label for="knockout">Knockout</label>
         </div>
       </div>
@@ -62,7 +79,9 @@
             type="button"
             class="bg-gray-700 text-white"
             @click="generateTeamStrengths"
-          >Generate team strengths</button>
+          >
+            Generate team strengths
+          </button>
         </div>
 
         <div class="flex space-x-2" v-for="(team, index) in teamList">
@@ -94,11 +113,20 @@
       </div>
       <div>
         <button
-          @click="changeScreen({ screen: 'the-tournament', slot: props.gameslot })"
+          @click="
+            changeScreen({ screen: 'the-tournament', slot: props.gameslot })
+          "
           class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
           :disabled="!formValidity"
-        >Submit form data</button>
-        <button @click="changeScreen({ screen: 'main-menu', slot: null })">Back to Main Menu</button>
+        >
+          Submit form data
+        </button>
+        <button
+          type="button"
+          @click="changeScreen({ screen: 'main-menu', slot: null })"
+        >
+          Back to Main Menu
+        </button>
       </div>
     </form>
   </div>
@@ -110,25 +138,25 @@ import { ref, watch, computed } from "vue";
 const props = defineProps({
   gameslot: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 const emit = defineEmits({
   "form-values": null,
-  'change-screen': null,
+  "change-screen": null,
 });
 
 const changeScreen = (payload) => {
-  emit('change-screen', payload)
+  emit("change-screen", payload);
   emit("form-values", {
-      tournamentName: tournamentName.value,
-      tournamentTeamCount: tournamentTeamCount.value,
-      tournamentRounds: tournamentRounds.value,
-      tournamentMode: tournamentMode.value,
-      teamList: teamList.value,
-    });
-}
+    tournamentName: tournamentName.value,
+    tournamentTeamCount: tournamentTeamCount.value,
+    tournamentRounds: tournamentRounds.value,
+    tournamentMode: tournamentMode.value,
+    teamList: teamList.value,
+  });
+};
 
 const tournamentName = ref("");
 const tournamentTeamCount = ref(2);
