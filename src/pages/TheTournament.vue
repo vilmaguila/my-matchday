@@ -27,13 +27,17 @@ import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 const props = defineProps({
   gameslot: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+  gamedata: {
+    type: Object,
+    required: true,
+  },
+});
 
 const listOfTournaments = ref([]);
 
-const activeTournament = ref(null);
+const activeTournament = ref(props.gamedata.gamedata);
 
 const generatedSchedule = ref(null);
 
