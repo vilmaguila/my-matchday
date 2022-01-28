@@ -1,18 +1,14 @@
 <template>
+  <button class="button" @click="changeScreen({ screen: 'main-menu' })">
+    Back to Main Menu
+  </button>
   <div class="flex flex-row items-start">
-    <tournament-form
-      @form-values="createTournamentObject"
-      class="w-96 h-96 overflow-y-auto"
-    ></tournament-form>
     <tournament-standings
       v-if="activeTournament"
       class="w-96 h-auto overflow-y-auto"
       :teams="activeTournament.teamList"
     >
     </tournament-standings>
-    <button @click="generateMatchesArray(activeTournament.teamList)">
-      PRESS to PROCEED
-    </button>
     <tournament-matchweek
       class="w-96 h-96 overflow-y-auto"
       v-if="activeTournament"
@@ -24,16 +20,36 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
-import TournamentForm from "../components/TournamentForm.vue";
+import { ref, reactive, onMounted } from "vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 
-const listOfTournaments = ref([]);
+const props = defineProps({
+  gameslot: {
+    type: Number,
+    required: true,
+  },
+  gamedata: {
+    type: Object,
+    required: true,
+  },
+});
 
-const activeTournament = ref(null);
+const emit = defineEmits({
+  "change-screen": {},
+});
 
-const generatedSchedule = ref(null);
+onMounted(() => {
+  if (!activeTournament.tournamentSchedule) {
+    generateMatchesArray(activeTournament.value.teamList);
+  }
+});
+
+const activeTournament = ref(props.gamedata.gamedata);
+
+const changeScreen = (payload) => {
+  emit("change-screen", payload);
+};
 
 const generateMatchesArray = (teamList) => {
   const matchesArray = [];
@@ -75,7 +91,6 @@ const generateMatchesArray = (teamList) => {
     const popped = localTeamList.pop();
     localTeamList.splice(1, 0, popped);
   }
-  generatedSchedule.value = matchesArray;
   activeTournament.value.tournamentSchedule = matchesArray;
   activeTournament.value.tournamentByeweeks = byeteams;
   activeTournament.value.tournamentWeeks = rounds;
