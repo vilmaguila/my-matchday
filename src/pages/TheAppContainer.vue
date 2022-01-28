@@ -1,13 +1,18 @@
 <template>
   <component
-    :is="currentScreen"
-    :gameSlots="gameSlots"
-    :gameslot="activeGameSlot"
+    :is="activeScreen"
+    v-bind="activeProps"
     :gamedata="activeGameData"
     @form-values="createTournamentObject"
     @change-screen="changeScreen"
   ></component>
 </template>
+
+<script>
+export default {
+  components: { TheMainMenu, TheTournament, TheNewGameScreen },
+};
+</script>
 
 <script setup>
 import { ref, reactive, computed } from "vue";
@@ -15,7 +20,7 @@ import TheTournament from "../pages/TheTournament.vue";
 import TheMainMenu from "../pages/TheMainMenu.vue";
 import TheNewGameScreen from "./TheNewGameScreen.vue";
 
-const currentScreen = ref(TheMainMenu);
+const activeScreen = ref("the-main-menu");
 const activeGameSlot = ref(null);
 
 const screenCoding = {
@@ -24,18 +29,25 @@ const screenCoding = {
   "the-tournament": TheTournament,
 };
 
-const gameSlots = ref([
+const gameSlots = [
   { slot: 1, gamedata: null },
   { slot: 2, gamedata: null },
   { slot: 3, gamedata: null },
-]);
+];
+
+const activeProps = computed(() => {
+  if (activeScreen.value === "the-main-menu")
+    return { gameSlots: gameSlots.value };
+  if (activeScreen.value === "the-new-game-screen")
+    return { gameslot: gameSlots.slot[activeGameSlot.value] };
+});
 
 const activeGameData = computed(() => {
   return gameSlots.value.find((slot) => slot.slot === activeGameSlot.value);
 });
 
 const changeScreen = (payload) => {
-  currentScreen.value = screenCoding[payload.screen];
+  activeScreen.value = screenCoding[payload.screen];
   activeGameSlot.value = payload.slot;
 };
 
