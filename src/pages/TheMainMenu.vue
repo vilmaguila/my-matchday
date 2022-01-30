@@ -4,9 +4,9 @@
     <game-slot v-for="(slot, index) in gameSlots">
       <div>Game {{ index + 1 }}</div>
       <div v-if="gameName">{{ gameName }}</div>
-      <div v-if="containsGame">
-        <button class="button">X</button>
-        <button class="button">Load Game</button>
+      <div v-if="slot.gamedata">
+        <button class="button" @click="deleteGame(slot.id)">X</button>
+        <button class="button" @click="loadGame(slot.id)">Load Game</button>
       </div>
       <div v-else>
         <button class="button" @click="newGame(slot.id)">New Game</button>
@@ -16,7 +16,6 @@
 </template>
 }
 <script setup>
-import { ref } from "vue";
 import GameSlot from "../components/GameSlot.vue";
 
 const props = defineProps({
@@ -34,8 +33,8 @@ const newGame = (slot) => {
   emit("set:activeGameslot", slot);
 };
 
-const changeScreen = (screen) => {
-  emit("change-screen", screen);
+const deleteGame = (slot) => {
+  emit("clear:gameslot", slot);
 };
 </script>
 

@@ -7,6 +7,7 @@
     @change-screen="changeScreen"
     @set:activeGameslot="setActiveGameslot"
     @set:gamestate="setGamestate"
+    @clear:gameslot="clearGameslot"
   ></component>
 </template>
 
@@ -46,6 +47,11 @@ const activeGameData = computed(() => {
 
 const setActiveGameslot = (id) => {
   activeGameSlot.value = id;
+};
+
+const clearGameslot = (id) => {
+  const idSlot = gameSlots.value.find((slot) => slot.id === id);
+  idSlot.gamedata = null;
 };
 
 const setGamestate = (payload) => {
