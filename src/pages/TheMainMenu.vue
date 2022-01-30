@@ -3,7 +3,6 @@
   <div>
     <game-slot v-for="(slot, index) in gameSlots">
       <div>Game {{ index + 1 }}</div>
-      <div v-if="gameName">{{ gameName }}</div>
       <div v-if="slot.gamedata">
         <button class="button" @click="deleteGame(slot.id)">X</button>
         <button class="button" @click="loadGame(slot.id)">Load Game</button>
@@ -23,7 +22,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-  "update-screen": {},
   "change-screen": {},
   "set:activeGameslot": {},
 });
@@ -35,6 +33,11 @@ const newGame = (slot) => {
 
 const deleteGame = (slot) => {
   emit("clear:gameslot", slot);
+};
+
+const loadGame = (slot) => {
+  emit("change-screen", "the-tournament");
+  emit("set:activeGameslot", slot);
 };
 </script>
 
