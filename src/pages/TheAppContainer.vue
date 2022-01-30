@@ -5,6 +5,7 @@
     :gamedata="activeGameData"
     @form-values="createTournamentObject"
     @change-screen="changeScreen"
+    @set:activeGameslot="setActiveGameslot"
   ></component>
 </template>
 
@@ -23,33 +24,36 @@ import TheNewGameScreen from "./TheNewGameScreen.vue";
 const activeScreen = ref("the-main-menu");
 const activeGameSlot = ref(null);
 
-const screenCoding = {
-  "main-menu": TheMainMenu,
-  "new-game-screen": TheNewGameScreen,
-  "the-tournament": TheTournament,
-};
-
-const gameSlots = ref([{ 1: null }, { 2: null }, { 3: null }]);
+const gameSlots = ref([
+  { id: 1, gamedata: null },
+  { id: 2, gamedata: null },
+  { id: 3, gamedata: null },
+]);
 
 const activeProps = computed(() => {
   if (activeScreen.value === "the-main-menu")
     return { gameSlots: gameSlots.value };
   if (activeScreen.value === "the-new-game-screen")
-    return { gameslot: gameSlots.value.activeGameSlot.value };
+    return { gameslot: activeGameSlot.value };
+  if (activeScreen.value === "the-tournament")
+    return { gameslot: activeGameSlot.value, gamedata: activeGameData.value };
 });
 
 const activeGameData = computed(() => {
-  return gameSlots.value.find((slot) => slot.slot === activeGameSlot.value);
+  return gameSlots.value.find((slot) => slot.id === activeGameSlot.value);
 });
 
+const setActiveGameslot = (id) => {
+  activeGameSlot.value = id;
+};
+
 const changeScreen = (payload) => {
-  activeScreen.value = screenCoding[payload.screen];
-  activeGameSlot.value = payload.data;
+  activeScreen.value = payload;
 };
 
 const createTournamentObject = (payload) => {
   const idSlot = gameSlots.value.find(
-    (slot) => slot.slot === activeGameSlot.value
+    (slot) => slot.id === activeGameSlot.value
   );
   idSlot.gamedata = reactive({
     tournamentName: payload.tournamentName,

@@ -1,11 +1,7 @@
 <template>
   <div>Welcome, this is the main menu</div>
   <div>
-    <game-slot
-      v-for="(slot, index) in gameSlots"
-      :slotNumber="index + 1"
-      @update-screen="updateScreen"
-    >
+    <game-slot v-for="(slot, index) in gameSlots">
       <div>Game {{ index + 1 }}</div>
       <div v-if="gameName">{{ gameName }}</div>
       <div v-if="containsGame">
@@ -13,12 +9,7 @@
         <button class="button">Load Game</button>
       </div>
       <div v-else>
-        <button
-          class="button"
-          @click="changeScreen({ screen: 'new-game-screen', data: slot })"
-        >
-          New Game
-        </button>
+        <button class="button" @click="newGame(slot.id)">New Game</button>
       </div>
     </game-slot>
   </div>
@@ -34,7 +25,14 @@ const props = defineProps({
 
 const emit = defineEmits({
   "update-screen": {},
+  "change-screen": {},
+  "set:activeGameslot": {},
 });
+
+const newGame = (slot) => {
+  emit("change-screen", "the-new-game-screen");
+  emit("set:activeGameslot", slot);
+};
 
 const changeScreen = (screen) => {
   emit("change-screen", screen);
