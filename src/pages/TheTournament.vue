@@ -1,7 +1,5 @@
 <template>
-  <button class="button" @click="changeScreen({ screen: 'main-menu' })">
-    Back to Main Menu
-  </button>
+  <button class="button" @click="navigateMainMenu">Back to Main Menu</button>
   <div class="flex flex-row items-start">
     <tournament-standings
       v-if="activeTournament"
@@ -37,7 +35,18 @@ const props = defineProps({
 
 const emit = defineEmits({
   "change-screen": {},
+  "set:activeGameslot": {},
+  "set:gamestate": {},
 });
+
+const navigateMainMenu = () => {
+  emit("change-screen", "the-main-menu");
+  emit("set:activeGameslot", null);
+  emit("set:gamestate", {
+    id: props.gameslot,
+    gamedata: activeTournament.value,
+  });
+};
 
 onMounted(() => {
   if (!activeTournament.tournamentSchedule) {
@@ -46,10 +55,6 @@ onMounted(() => {
 });
 
 const activeTournament = ref(props.gamedata.gamedata);
-
-const changeScreen = (payload) => {
-  emit("change-screen", payload);
-};
 
 const generateMatchesArray = (teamList) => {
   const matchesArray = [];

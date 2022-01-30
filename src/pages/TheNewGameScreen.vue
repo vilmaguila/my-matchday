@@ -121,10 +121,7 @@
         >
           Submit form data
         </button>
-        <button
-          type="button"
-          @click="changeScreen({ screen: 'main-menu', slot: null })"
-        >
+        <button type="button" @click="navigateMainMenu">
           Back to Main Menu
         </button>
       </div>
@@ -145,17 +142,27 @@ const props = defineProps({
 const emit = defineEmits({
   "form-values": null,
   "change-screen": null,
+  "set:activeGameslot": null,
 });
 
+const navigateMainMenu = () => {
+  emit("change-screen", "the-main-menu");
+  emit("set:activeGameslot", null);
+};
+
 const changeScreen = (payload) => {
-  emit("change-screen", payload);
-  emit("form-values", {
-    tournamentName: tournamentName.value,
-    tournamentTeamCount: tournamentTeamCount.value,
-    tournamentRounds: tournamentRounds.value,
-    tournamentMode: tournamentMode.value,
-    teamList: teamList.value,
-  });
+  emit("change-screen", "the-tournament");
+  emit(
+    "form-values",
+    {
+      tournamentName: tournamentName.value,
+      tournamentTeamCount: tournamentTeamCount.value,
+      tournamentRounds: tournamentRounds.value,
+      tournamentMode: tournamentMode.value,
+      teamList: teamList.value,
+    },
+    props.gameslot
+  );
 };
 
 const tournamentName = ref("");

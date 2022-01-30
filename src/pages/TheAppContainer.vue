@@ -5,6 +5,9 @@
     :gamedata="activeGameData"
     @form-values="createTournamentObject"
     @change-screen="changeScreen"
+    @set:activeGameslot="setActiveGameslot"
+    @set:gamestate="setGamestate"
+    @clear:gameslot="clearGameslot"
   ></component>
 </template>
 
@@ -23,37 +26,46 @@ import TheNewGameScreen from "./TheNewGameScreen.vue";
 const activeScreen = ref("the-main-menu");
 const activeGameSlot = ref(null);
 
-const screenCoding = {
-  "main-menu": TheMainMenu,
-  "new-game-screen": TheNewGameScreen,
-  "the-tournament": TheTournament,
-};
-
-const gameSlots = [
-  { slot: 1, gamedata: null },
-  { slot: 2, gamedata: null },
-  { slot: 3, gamedata: null },
-];
+const gameSlots = ref([
+  { id: 1, gamedata: null },
+  { id: 2, gamedata: null },
+  { id: 3, gamedata: null },
+]);
 
 const activeProps = computed(() => {
   if (activeScreen.value === "the-main-menu")
     return { gameSlots: gameSlots.value };
   if (activeScreen.value === "the-new-game-screen")
-    return { gameslot: gameSlots.slot[activeGameSlot.value] };
+    return { gameslot: activeGameSlot.value };
+  if (activeScreen.value === "the-tournament")
+    return { gameslot: activeGameSlot.value, gamedata: activeGameData.value };
 });
 
 const activeGameData = computed(() => {
-  return gameSlots.value.find((slot) => slot.slot === activeGameSlot.value);
+  return gameSlots.value.find((slot) => slot.id === activeGameSlot.value);
 });
 
+const setActiveGameslot = (id) => {
+  activeGameSlot.value = id;
+};
+
+const clearGameslot = (id) => {
+  const idSlot = gameSlots.value.find((slot) => slot.id === id);
+  idSlot.gamedata = null;
+};
+
+const setGamestate = (payload) => {
+  const idSlot = gameSlots.value.find((slot) => slot.id === payload.id);
+  idSlot.gamedata = payload.gamedata;
+};
+
 const changeScreen = (payload) => {
-  activeScreen.value = screenCoding[payload.screen];
-  activeGameSlot.value = payload.slot;
+  activeScreen.value = payload;
 };
 
 const createTournamentObject = (payload) => {
   const idSlot = gameSlots.value.find(
-    (slot) => slot.slot === activeGameSlot.value
+    (slot) => slot.id === activeGameSlot.value
   );
   idSlot.gamedata = reactive({
     tournamentName: payload.tournamentName,
