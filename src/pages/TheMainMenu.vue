@@ -15,8 +15,10 @@
       <div v-else>
         <button
           class="button"
-          @click="changeScreen({ screen: 'new-game-screen', slot: slot.slot })"
-        >New Game</button>
+          @click="changeScreen({ screen: 'new-game-screen', data: slot })"
+        >
+          New Game
+        </button>
       </div>
     </game-slot>
   </div>
@@ -27,14 +29,12 @@ import { ref } from "vue";
 import GameSlot from "../components/GameSlot.vue";
 
 const props = defineProps({
-  gameSlots: {}
-})
+  gameSlots: {},
+});
 
 const emit = defineEmits({
   "update-screen": {},
 });
-
-
 
 const changeScreen = (screen) => {
   emit("change-screen", screen);

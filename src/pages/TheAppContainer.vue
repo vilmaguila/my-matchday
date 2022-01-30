@@ -29,17 +29,13 @@ const screenCoding = {
   "the-tournament": TheTournament,
 };
 
-const gameSlots = [
-  { slot: 1, gamedata: null },
-  { slot: 2, gamedata: null },
-  { slot: 3, gamedata: null },
-];
+const gameSlots = ref([{ 1: null }, { 2: null }, { 3: null }]);
 
 const activeProps = computed(() => {
   if (activeScreen.value === "the-main-menu")
     return { gameSlots: gameSlots.value };
   if (activeScreen.value === "the-new-game-screen")
-    return { gameslot: gameSlots.slot[activeGameSlot.value] };
+    return { gameslot: gameSlots.value.activeGameSlot.value };
 });
 
 const activeGameData = computed(() => {
@@ -48,7 +44,7 @@ const activeGameData = computed(() => {
 
 const changeScreen = (payload) => {
   activeScreen.value = screenCoding[payload.screen];
-  activeGameSlot.value = payload.slot;
+  activeGameSlot.value = payload.data;
 };
 
 const createTournamentObject = (payload) => {
