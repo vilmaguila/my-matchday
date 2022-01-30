@@ -6,6 +6,7 @@
     @form-values="createTournamentObject"
     @change-screen="changeScreen"
     @set:activeGameslot="setActiveGameslot"
+    @set:gamestate="setGamestate"
   ></component>
 </template>
 
@@ -45,6 +46,11 @@ const activeGameData = computed(() => {
 
 const setActiveGameslot = (id) => {
   activeGameSlot.value = id;
+};
+
+const setGamestate = (payload) => {
+  const idSlot = gameSlots.value.find((slot) => slot.id === payload.id);
+  idSlot.gamedata = payload.gamedata;
 };
 
 const changeScreen = (payload) => {

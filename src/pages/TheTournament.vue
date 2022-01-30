@@ -36,11 +36,16 @@ const props = defineProps({
 const emit = defineEmits({
   "change-screen": {},
   "set:activeGameslot": {},
+  "set:gamestate": {},
 });
 
 const navigateMainMenu = () => {
   emit("change-screen", "the-main-menu");
   emit("set:activeGameslot", null);
+  emit("set:gamestate", {
+    id: props.gameslot,
+    gamedata: activeTournament.value,
+  });
 };
 
 onMounted(() => {
@@ -50,10 +55,6 @@ onMounted(() => {
 });
 
 const activeTournament = ref(props.gamedata.gamedata);
-
-const changeScreen = (payload) => {
-  emit("change-screen", payload);
-};
 
 const generateMatchesArray = (teamList) => {
   const matchesArray = [];
