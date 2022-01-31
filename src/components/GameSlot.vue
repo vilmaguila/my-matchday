@@ -1,8 +1,13 @@
 <template>
-<slot></slot>
-  
+  <div>
+    <slot></slot>
+  </div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
+<style scoped>
+div {
+  @apply flex flex-col bg-indigo-200 rounded-lg m-3;
+}
+</style>

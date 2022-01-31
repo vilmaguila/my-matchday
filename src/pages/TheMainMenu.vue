@@ -1,16 +1,22 @@
 <template>
-  <div>Welcome, this is the main menu</div>
-  <div>
-    <game-slot v-for="(slot, index) in gameSlots">
-      <div>Game {{ index + 1 }}</div>
-      <div v-if="slot.gamedata">
-        <button class="button" @click="deleteGame(slot.id)">X</button>
-        <button class="button" @click="loadGame(slot.id)">Load Game</button>
-      </div>
-      <div v-else>
-        <button class="button" @click="newGame(slot.id)">New Game</button>
-      </div>
-    </game-slot>
+  <div class="flex flex-col h-screen items-stretch mx-auto bg-gray-100">
+    <div>Welcome, this is the main menu</div>
+    <div>
+      <game-slot v-for="(slot, index) in gameSlots">
+        <div class="text-center">Game {{ index + 1 }}</div>
+        <div v-if="slot.gamedata" class="flex flex-row">
+          <button class="button m-2 w-full" @click="loadGame(slot.id)">
+            Load Game
+          </button>
+          <button class="button m-2" @click="deleteGame(slot.id)">X</button>
+        </div>
+        <div v-else class="flex flex-row">
+          <button class="button m-2 w-full" @click="newGame(slot.id)">
+            New Game
+          </button>
+        </div>
+      </game-slot>
+    </div>
   </div>
 </template>
 }
