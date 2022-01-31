@@ -18,7 +18,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted, watch } from "vue";
 import TheTournament from "../pages/TheTournament.vue";
 import TheMainMenu from "../pages/TheMainMenu.vue";
 import TheNewGameScreen from "./TheNewGameScreen.vue";
@@ -79,4 +79,20 @@ const createTournamentObject = (payload) => {
     tournamentWeeks: null,
   });
 };
+
+onMounted(() => {
+  if (localStorage.getItem('gamesim:gamedata')) {
+    try {
+      gameSlots.value = JSON.parse(localStorage.getItem('gamesim:gamedata'));
+    } catch (e) {
+      localStorage.removeItem('gamesim:gamedata');
+    }
+  }
+})
+
+watch(gameSlots, (newVal) => {
+  const parsed = JSON.stringify(newVal);
+  localStorage.setItem('gamesim:gamedata', parsed);
+}, { deep: true })
+
 </script>
