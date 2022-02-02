@@ -1,21 +1,23 @@
 <template>
-  <button class="button-red" @click="navigateMainMenu">
-    Back to Main Menu
-  </button>
-  <div class="flex flex-row items-start">
-    <tournament-standings
-      v-if="activeTournament"
-      class="w-96 h-auto overflow-y-auto"
-      :teams="activeTournament.teamList"
-    >
-    </tournament-standings>
-    <tournament-matchweek
-      class="w-96 h-96 overflow-y-auto"
-      v-if="activeTournament"
-      :matches="activeTournament.tournamentSchedule"
-      :rounds="activeTournament.tournamentWeeks"
-      @dispatch-result="storeResult"
-    ></tournament-matchweek>
+  <div class="screen-grey">
+    <button class="button-red" @click="navigateMainMenu">
+      Back to Main Menu
+    </button>
+    <div class="flex flex-row items-start">
+      <tournament-standings
+        v-if="activeTournament"
+        class="w-96 h-auto overflow-y-auto"
+        :teams="activeTournament.teamList"
+      >
+      </tournament-standings>
+      <tournament-matchweek
+        class="w-96 h-96 overflow-y-auto"
+        v-if="activeTournament"
+        :matches="activeTournament.tournamentSchedule"
+        :rounds="activeTournament.tournamentWeeks"
+        @dispatch-result="storeResult"
+      ></tournament-matchweek>
+    </div>
   </div>
 </template>
 

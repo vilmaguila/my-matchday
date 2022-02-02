@@ -1,6 +1,6 @@
 <template>
   <div class="screen-grey">
-    <div>Welcome, this is the main menu</div>
+    <label-banner>Main Menu</label-banner>
     <div>
       <game-slot v-for="(slot, index) in gameSlots">
         <div class="text-center">Game {{ index + 1 }}</div>
@@ -22,6 +22,7 @@
 }
 <script setup>
 import GameSlot from "../components/GameSlot.vue";
+import LabelBanner from "../components/LabelBanner.vue";
 
 const props = defineProps({
   gameSlots: {},
