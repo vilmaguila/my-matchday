@@ -8,7 +8,7 @@
           <button class="button m-2 w-full" @click="loadGame(slot.id)">
             Load Game
           </button>
-          <button class="button m-2" @click="deleteGame(slot.id)">X</button>
+          <button class="button-red m-2" @click="deleteGame(slot.id)">X</button>
         </div>
         <div v-else class="flex flex-row">
           <button class="button m-2 w-full" @click="newGame(slot.id)">
