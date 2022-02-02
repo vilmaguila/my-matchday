@@ -1,8 +1,10 @@
 <template>
   <div class="screen-grey">
-    <button class="button-red" @click="navigateMainMenu">
-      Back to Main Menu
-    </button>
+    <div class="flex flex-row rounded-md text-4xl bg-gray-400">
+      <button class="button-red" @click="navigateMainMenu">Main Menu</button>
+      <div class="m-auto">My-Matchday</div>
+    </div>
+
     <div class="flex flex-row items-start">
       <tournament-standings
         v-if="activeTournament"
