@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-2 bg-gray-200 rounded-xl p-4 m-4">
+  <div class="flex flex-col gap-2 bg-gray-200 rounded-xl p-4">
     <h1 class="text-center text-2xl">New Game</h1>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
