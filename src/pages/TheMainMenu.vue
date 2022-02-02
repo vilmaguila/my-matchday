@@ -1,15 +1,19 @@
 <template>
-  <div class="flex flex-col h-screen items-stretch mx-auto bg-gray-100">
-    <div>Welcome, this is the main menu</div>
+  <div class="screen-grey">
+    <label-banner>Main Menu</label-banner>
     <div>
       <game-slot v-for="(slot, index) in gameSlots">
         <div class="text-center">Game {{ index + 1 }}</div>
         <div v-if="slot.gamedata" class="flex flex-row">
-          <button class="button" @click="loadGame(slot.id)">Load Game</button>
+          <button class="button-green" @click="loadGame(slot.id)">
+            Load Game
+          </button>
           <button class="button-red" @click="deleteGame(slot.id)">X</button>
         </div>
         <div v-else class="flex flex-row">
-          <button class="button" @click="newGame(slot.id)">New Game</button>
+          <button class="button-green" @click="newGame(slot.id)">
+            New Game
+          </button>
         </div>
       </game-slot>
     </div>
@@ -18,6 +22,7 @@
 }
 <script setup>
 import GameSlot from "../components/GameSlot.vue";
+import LabelBanner from "../components/LabelBanner.vue";
 
 const props = defineProps({
   gameSlots: {},
