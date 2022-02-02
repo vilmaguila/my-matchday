@@ -1,14 +1,13 @@
 <template>
   <div class="flex flex-col gap-2 bg-gray-200 rounded-xl p-4 m-4">
-    <h1 class="text-center text-2xl">Tournament Schedule Generator</h1>
+    <h1 class="text-center text-2xl">New Game</h1>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
         <label
           for="tournament_name"
           :class="{ 'text-red-500': tournamentNameValidity === 'invalid' }"
+          >Name</label
         >
-          Tournament name
-        </label>
         <input
           type="text"
           id="tournament_name"
@@ -24,9 +23,7 @@
         </p>
       </div>
       <div class="flex flex-col">
-        <label for="team_count">
-          Choose the number of teams participating</label
-        >
+        <label for="team_count">Choose the number of teams participating</label>
         <select
           v-model.number="tournamentTeamCount"
           class="bg-gray-300 rounded-sm px-2 py-1"
@@ -52,7 +49,7 @@
             id="league"
             v-model="tournamentMode"
           />
-          <label for="league"> League </label>
+          <label for="league">League</label>
         </div>
         <div>
           <input
@@ -62,7 +59,7 @@
             v-model="tournamentMode"
             disabled
           />
-          <label for="groupknockout"> Group + Knockout </label>
+          <label for="groupknockout">Group + Knockout</label>
         </div>
         <div>
           <input
@@ -72,7 +69,7 @@
             v-model="tournamentMode"
             disabled
           />
-          <label for="knockout"> Knockout </label>
+          <label for="knockout">Knockout</label>
         </div>
       </div>
       <div class="flex flex-col space-y-2">
@@ -116,11 +113,16 @@
       </div>
       <div>
         <button
-          type="submit"
+          @click="
+            changeScreen({ screen: 'the-tournament', slot: props.gameslot })
+          "
           class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
           :disabled="!formValidity"
         >
           Submit form data
+        </button>
+        <button type="button" @click="navigateMainMenu">
+          Back to Main Menu
         </button>
       </div>
     </form>
@@ -130,9 +132,38 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 
+const props = defineProps({
+  gameslot: {
+    type: Number,
+    required: true,
+  },
+});
+
 const emit = defineEmits({
   "form-values": null,
+  "change-screen": null,
+  "set:activeGameslot": null,
 });
+
+const navigateMainMenu = () => {
+  emit("change-screen", "the-main-menu");
+  emit("set:activeGameslot", null);
+};
+
+const changeScreen = (payload) => {
+  emit("change-screen", "the-tournament");
+  emit(
+    "form-values",
+    {
+      tournamentName: tournamentName.value,
+      tournamentTeamCount: tournamentTeamCount.value,
+      tournamentRounds: tournamentRounds.value,
+      tournamentMode: tournamentMode.value,
+      teamList: teamList.value,
+    },
+    props.gameslot
+  );
+};
 
 const tournamentName = ref("");
 const tournamentTeamCount = ref(2);

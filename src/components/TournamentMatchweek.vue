@@ -1,18 +1,66 @@
 <template>
-  <div class="bg-gray-400">
-    <div>{{ matchweek.name }}</div>
+  <div>
+    <button @click="previousRound">Previous</button>
+    <button @click="nextRound">Next</button>
+    <div>ROUND {{ currentRound }}</div>
+    <tournament-match
+      v-for="match in filteredMatchweek"
+      :match="match"
+      @dispatch-result="dispatchResult"
+    >
+      <template #selected>
+        <input
+          type="checkbox"
+          :name="match.id"
+          :value="match.id"
+          :id="match.id"
+          v-model="selectedForSimulation"
+        />
+      </template>
+    </tournament-match>
     <slot></slot>
-    <div>TEAMS ON BYE: {{ matchweek.byeteams }}</div>
+    {{ selectedForSimulation }}
+    <button @click="dummyCall">Simulate selected</button>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import TournamentMatch from "./TournamentMatch.vue";
 
 const props = defineProps({
-  matchweek: {
-    type: Object,
-    default: {},
+  matches: {
+    type: Array,
+    default: [],
   },
+  rounds: {},
+});
+
+const emit = defineEmits({
+  "dispatch-result": {},
+});
+
+const selectedForSimulation = ref([]);
+
+const dummyCall = () => {
+  alert("Sending array of ids for simulation");
+  selectedForSimulation.value.splice(0);
+};
+
+const dispatchResult = (payload) => {
+  emit("dispatch-result", payload);
+};
+
+const currentRound = ref(1);
+const nextRound = () => {
+  if (currentRound.value < props.rounds) currentRound.value += 1;
+};
+const previousRound = () => {
+  if (currentRound.value < 2) return;
+  currentRound.value -= 1;
+};
+
+const filteredMatchweek = computed(() => {
+  return props.matches.filter((match) => match.round === currentRound.value);
 });
 </script>
