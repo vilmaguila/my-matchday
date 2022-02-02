@@ -1,5 +1,6 @@
 <template>
   <component
+    class="container mx-auto"
     :is="activeScreen"
     v-bind="activeProps"
     :gamedata="activeGameData"
@@ -81,18 +82,21 @@ const createTournamentObject = (payload) => {
 };
 
 onMounted(() => {
-  if (localStorage.getItem('gamesim:gamedata')) {
+  if (localStorage.getItem("gamesim:gamedata")) {
     try {
-      gameSlots.value = JSON.parse(localStorage.getItem('gamesim:gamedata'));
+      gameSlots.value = JSON.parse(localStorage.getItem("gamesim:gamedata"));
     } catch (e) {
-      localStorage.removeItem('gamesim:gamedata');
+      localStorage.removeItem("gamesim:gamedata");
     }
   }
-})
+});
 
-watch(gameSlots, (newVal) => {
-  const parsed = JSON.stringify(newVal);
-  localStorage.setItem('gamesim:gamedata', parsed);
-}, { deep: true })
-
+watch(
+  gameSlots,
+  (newVal) => {
+    const parsed = JSON.stringify(newVal);
+    localStorage.setItem("gamesim:gamedata", parsed);
+  },
+  { deep: true }
+);
 </script>

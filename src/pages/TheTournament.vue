@@ -1,5 +1,7 @@
 <template>
-  <button class="button" @click="navigateMainMenu">Back to Main Menu</button>
+  <button class="button-red" @click="navigateMainMenu">
+    Back to Main Menu
+  </button>
   <div class="flex flex-row items-start">
     <tournament-standings
       v-if="activeTournament"
