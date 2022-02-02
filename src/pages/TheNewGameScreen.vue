@@ -1,6 +1,6 @@
 <template>
   <div class="screen-grey">
-    <h1 class="text-center text-2xl">New Game</h1>
+    <label-banner>New Game</label-banner>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
         <label
@@ -130,6 +130,7 @@
 </template>
 
 <script setup>
+import LabelBanner from "../components/LabelBanner.vue";
 import { ref, watch, computed } from "vue";
 
 const props = defineProps({

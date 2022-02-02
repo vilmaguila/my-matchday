@@ -19,6 +19,6 @@
     @apply bg-red-200 text-gray-800 w-16 rounded-md m-2 p-2 hover:bg-red-300;
   }
   .screen-grey {
-    @apply flex flex-col gap-2 bg-gray-200 h-screen items-stretch mx-auto p-4;
+    @apply flex flex-col gap-2 bg-gray-200 min-h-screen items-stretch mx-auto p-4;
   }
 }
