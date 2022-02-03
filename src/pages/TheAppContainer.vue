@@ -91,12 +91,12 @@ onMounted(() => {
   }
 });
 
-watch(
-  gameSlots,
-  (newVal) => {
-    const parsed = JSON.stringify(newVal);
-    localStorage.setItem("gamesim:gamedata", parsed);
-  },
-  { deep: true }
-);
+// watch(
+//   gameSlots,
+//   (newVal) => {
+//     const parsed = JSON.stringify(newVal);
+//     localStorage.setItem("gamesim:gamedata", parsed);
+//   },
+//   { deep: true }
+// );
 </script>

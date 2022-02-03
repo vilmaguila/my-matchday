@@ -10,14 +10,14 @@
         v-if="activeTournament"
         class="w-96 h-auto overflow-y-auto"
         :teams="activeTournament.teamList"
-      >
-      </tournament-standings>
+      ></tournament-standings>
       <tournament-matchweek
         class="w-96 h-96 overflow-y-auto"
         v-if="activeTournament"
         :matches="activeTournament.tournamentSchedule"
         :rounds="activeTournament.tournamentWeeks"
         @dispatch-result="storeResult"
+        @selected-sim="dummyCall"
       ></tournament-matchweek>
     </div>
   </div>
@@ -54,6 +54,43 @@ const navigateMainMenu = () => {
   });
 };
 
+const dummyCall = (payload) => {
+  for (const matchid of payload) {
+    // const identifiedMatch = activeTournament.value.tournamentSchedule.find(match => matchid === match.id)
+    simulateMatch(matchid)
+  }
+}
+
+const simulateMatch = (matchid) => {
+  const identifiedMatch = activeTournament.value.tournamentSchedule.find(
+    (match) => match.id === matchid
+  );
+  const homeGoals = Math.round(
+    (identifiedMatch.homeTeam.OFF / identifiedMatch.awayTeam.DEF) *
+    Math.random() *
+    (49 - 0) +
+    -1
+  );
+  const awayGoals = Math.round(
+    (identifiedMatch.awayTeam.OFF / identifiedMatch.homeTeam.DEF) *
+    Math.random() *
+    (49 - 0) +
+    -1
+  );
+  identifiedMatch.score.home = homeGoals
+  identifiedMatch.score.away = awayGoals
+  if (homeGoals > awayGoals) {
+    identifiedMatch.result.winner = identifiedMatch.homeTeam;
+    identifiedMatch.result.loser = identifiedMatch.awayTeam;
+  } else if (awayGoals > homeGoals) {
+    identifiedMatch.result.winner = identifiedMatch.awayTeam;
+    identifiedMatch.result.loser = identifiedMatch.homeTeam;
+  } else {
+    identifiedMatch.result.draw = true;
+  }
+  updateTeamRecords(identifiedMatch.id);
+};
+
 onMounted(() => {
   if (!activeTournament.tournamentSchedule) {
     generateMatchesArray(activeTournament.value.teamList);
@@ -61,6 +98,68 @@ onMounted(() => {
 });
 
 const activeTournament = ref(props.gamedata.gamedata);
+
+const updateTeamRecords = (matchid) => {
+  const identifiedMatch = activeTournament.value.tournamentSchedule.find(
+    (match) => match.id === matchid
+  );
+  const idHome = activeTournament.value.teamList.find(
+    (team) => team.name === identifiedMatch.homeTeam.name
+  );
+  const idAway = activeTournament.value.teamList.find(
+    (team) => team.name === identifiedMatch.awayTeam.name
+  );
+
+  if (identifiedMatch.result.played) {
+    if (identifiedMatch.result.winner === idHome) {
+      idHome.W -= 1;
+      idAway.L -= 1;
+    } else if (identifiedMatch.result.winner === idAway) {
+      idHome.L -= 1;
+      idAway.W -= 1;
+    } else {
+      idHome.T -= 1;
+      idAway.T -= 1;
+    }
+  }
+
+  const homeMatch = idHome.results.find(
+    (match) => match.id === matchid
+  );
+  const awayMatch = idAway.results.find(
+    (match) => match.id === matchid
+  );
+  if (homeMatch) {
+    const index = idHome.results.findIndex(
+      (match) => match.id === matchid
+    );
+    idHome.results.splice(index, 1);
+    idHome.results.push(identifiedMatch);
+  } else {
+    idHome.results.push(identifiedMatch);
+  }
+  if (awayMatch) {
+    const index = idAway.results.findIndex(
+      (match) => match.id === matchid
+    );
+    idAway.results.splice(index, 1);
+    idAway.results.push(identifiedMatch);
+  } else {
+    idAway.results.push(identifiedMatch);
+  }
+
+  if (identifiedMatch.result.winner === idHome) {
+    idHome.W += 1;
+    idAway.L += 1;
+  } else if (identifiedMatch.result.winner === idAway) {
+    idHome.L += 1;
+    idAway.W += 1;
+  } else {
+    idHome.T += 1;
+    idAway.T += 1;
+  }
+  identifiedMatch.result.played = true;
+};
 
 const generateMatchesArray = (teamList) => {
   const matchesArray = [];
@@ -108,73 +207,6 @@ const generateMatchesArray = (teamList) => {
   return matchesArray;
 };
 
-const storeResult = (payload) => {
-  const identifiedMatch = activeTournament.value.tournamentSchedule.find(
-    (match) => payload.match.id === match.id
-  );
-  const idHome = activeTournament.value.teamList.find(
-    (team) => team.name === payload.match.homeTeam.name
-  );
-  const idAway = activeTournament.value.teamList.find(
-    (team) => team.name === payload.match.awayTeam.name
-  );
-
-  if (identifiedMatch.result.played) {
-    if (identifiedMatch.result.winner === idHome) {
-      idHome.W -= 1;
-      idAway.L -= 1;
-    } else if (identifiedMatch.result.winner === idAway) {
-      idHome.L -= 1;
-      idAway.W -= 1;
-    } else {
-      idHome.T -= 1;
-      idAway.T -= 1;
-    }
-  }
-
-  identifiedMatch.score.home = payload.homeScore;
-  identifiedMatch.score.away = payload.awayScore;
-  identifiedMatch.result.winner = payload.winner;
-  identifiedMatch.result.loser = payload.loser;
-
-  const homeMatch = idHome.results.find(
-    (match) => match.id === payload.match.id
-  );
-  const awayMatch = idAway.results.find(
-    (match) => match.id === payload.match.id
-  );
-  if (homeMatch) {
-    const index = idHome.results.findIndex(
-      (match) => match.id === payload.match.id
-    );
-    idHome.results.splice(index, 1);
-    idHome.results.push(payload.match);
-  } else {
-    idHome.results.push(payload.match);
-  }
-  if (awayMatch) {
-    const index = idAway.results.findIndex(
-      (match) => match.id === payload.match.id
-    );
-    idAway.results.splice(index, 1);
-    idAway.results.push(payload.match);
-  } else {
-    idAway.results.push(payload.match);
-  }
-
-  if (payload.winner === idHome) {
-    idHome.W += 1;
-    idAway.L += 1;
-  } else if (payload.winner === idAway) {
-    idHome.L += 1;
-    idAway.W += 1;
-  } else {
-    idHome.T += 1;
-    idAway.T += 1;
-  }
-  identifiedMatch.result.played = true;
-};
-
 const generateMatchObject = (home, away, round) => {
   if (home === "BYE") {
     return away.name;
@@ -189,9 +221,6 @@ const generateMatchObject = (home, away, round) => {
       result: { played: false, winner: null, loser: null, draw: null },
       homeTeam: home,
       awayTeam: away,
-      winner: null,
-      loser: null,
-      draw: null,
       score: {
         home: null,
         away: null,
@@ -205,22 +234,5 @@ let matchID = 0;
 const getMatchID = () => {
   matchID += 1;
   return matchID;
-};
-
-const formSubmitted = ref(false);
-
-const createTournamentObject = (payload) => {
-  activeTournament.value = reactive({
-    tournamentName: payload.tournamentName,
-    tournamentTeamCount: payload.tournamentTeamCount,
-    tournamentRounds: payload.tournamentRounds,
-    tournamentMode: payload.tournamentMode,
-    teamList: payload.teamList,
-    tournamentSchedule: [],
-    tournamentStandings: null,
-    tournamentByeweeks: null,
-    tournamentWeeks: null,
-  });
-  formSubmitted.value = true;
 };
 </script>
