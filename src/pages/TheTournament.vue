@@ -124,28 +124,28 @@ const updateTeamRecords = (matchid) => {
   }
 
   const homeMatch = idHome.results.find(
-    (match) => match.id === matchid
+    (id) => id === matchid
   );
   const awayMatch = idAway.results.find(
-    (match) => match.id === matchid
+    (id) => id === matchid
   );
   if (homeMatch) {
     const index = idHome.results.findIndex(
-      (match) => match.id === matchid
+      (id) => id === matchid
     );
     idHome.results.splice(index, 1);
-    idHome.results.push(identifiedMatch);
+    idHome.results.push(identifiedMatch.id);
   } else {
-    idHome.results.push(identifiedMatch);
+    idHome.results.push(identifiedMatch.id);
   }
   if (awayMatch) {
     const index = idAway.results.findIndex(
-      (match) => match.id === matchid
+      (id) => id === matchid
     );
     idAway.results.splice(index, 1);
-    idAway.results.push(identifiedMatch);
+    idAway.results.push(identifiedMatch.id);
   } else {
-    idAway.results.push(identifiedMatch);
+    idAway.results.push(identifiedMatch.id);
   }
 
   if (identifiedMatch.result.winner === idHome) {
