@@ -68,19 +68,19 @@ const createTournamentObject = (payload) => {
   const idSlot = gameSlots.value.find(
     (slot) => slot.id === activeGameSlot.value
   );
-  const { matcharray, byeweeks, weeks } = generateMatchesArray(
-    payload.teamList,
-    payload.tournamentRounds
-  );
+  let result = generateMatchesArray(payload.teamList, payload.tournamentRounds);
+  let ar = result.matchesArray;
+  let by = result.byeteams;
+  let we = result.rounds;
   idSlot.gamedata = reactive({
     tournamentName: payload.tournamentName,
     tournamentTeamCount: payload.tournamentTeamCount,
     tournamentRounds: payload.tournamentRounds,
     tournamentMode: payload.tournamentMode,
     teamList: payload.teamList,
-    tournamentSchedule: matcharray,
-    tournamentByeweeks: byeweeks,
-    tournamentWeeks: weeks,
+    tournamentSchedule: ar,
+    tournamentByeweeks: by,
+    tournamentWeeks: we,
   });
 };
 
@@ -123,8 +123,10 @@ const generateMatchesArray = (teamList, tournamentRounds) => {
         );
         if (typeof match === "string") {
           byeteams.push({ i, match });
+          console.log("put one to bye");
         } else {
           matchesArray.push(match);
+          console.log("pushed game to array");
         }
       } else {
         const match = generateMatchObject(
@@ -136,6 +138,7 @@ const generateMatchesArray = (teamList, tournamentRounds) => {
           byeteams.push({ i, match });
         } else {
           matchesArray.push(match);
+          console.log("pushed game to array");
         }
       }
     }
