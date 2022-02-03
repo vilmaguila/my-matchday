@@ -9,6 +9,7 @@
     @set:activeGameslot="setActiveGameslot"
     @set:gamestate="setGamestate"
     @clear:gameslot="clearGameslot"
+    @sim-selected="simulateSelected"
   ></component>
 </template>
 
@@ -48,6 +49,103 @@ const activeGameData = computed(() => {
 
 const setActiveGameslot = (id) => {
   activeGameSlot.value = id;
+};
+
+const simulateSelected = (payload) => {
+  alert("ready ro simulate");
+  for (const matchid of payload) {
+    simulateMatch(matchid);
+  }
+};
+
+const simulateMatch = (matchid) => {
+  const idSlot = gameSlots.value.find(
+    (slot) => slot.id === activeGameSlot.value
+  );
+  const identifiedMatch = idSlot.gamedata.tournamentSchedule.find(
+    (match) => match.id === matchid
+  );
+  const homeGoals = Math.round(
+    (identifiedMatch.homeTeam.OFF / identifiedMatch.awayTeam.DEF) *
+      Math.random() *
+      (49 - 0) +
+      -1
+  );
+  const awayGoals = Math.round(
+    (identifiedMatch.awayTeam.OFF / identifiedMatch.homeTeam.DEF) *
+      Math.random() *
+      (49 - 0) +
+      -1
+  );
+  identifiedMatch.score.home = homeGoals;
+  identifiedMatch.score.away = awayGoals;
+  if (homeGoals > awayGoals) {
+    identifiedMatch.result.winner = identifiedMatch.homeTeam;
+    identifiedMatch.result.loser = identifiedMatch.awayTeam;
+  } else if (awayGoals > homeGoals) {
+    identifiedMatch.result.winner = identifiedMatch.awayTeam;
+    identifiedMatch.result.loser = identifiedMatch.homeTeam;
+  } else {
+    identifiedMatch.result.draw = true;
+  }
+  updateTeamRecords(identifiedMatch.id);
+};
+
+const updateTeamRecords = (matchid) => {
+  const idSlot = gameSlots.value.find(
+    (slot) => slot.id === activeGameSlot.value
+  );
+  const identifiedMatch = idSlot.gamedata.tournamentSchedule.find(
+    (match) => match.id === matchid
+  );
+  const idHome = idSlot.gamedata.teamList.find(
+    (team) => team.name === identifiedMatch.homeTeam.name
+  );
+  const idAway = idSlot.gamedata.teamList.find(
+    (team) => team.name === identifiedMatch.awayTeam.name
+  );
+
+  if (identifiedMatch.result.played) {
+    if (identifiedMatch.result.winner === idHome) {
+      idHome.W -= 1;
+      idAway.L -= 1;
+    } else if (identifiedMatch.result.winner === idAway) {
+      idHome.L -= 1;
+      idAway.W -= 1;
+    } else {
+      idHome.T -= 1;
+      idAway.T -= 1;
+    }
+  }
+
+  const homeMatch = idHome.results.find((id) => id === matchid);
+  const awayMatch = idAway.results.find((id) => id === matchid);
+  if (homeMatch) {
+    const index = idHome.results.findIndex((id) => id === matchid);
+    idHome.results.splice(index, 1);
+    idHome.results.push(identifiedMatch.id);
+  } else {
+    idHome.results.push(identifiedMatch.id);
+  }
+  if (awayMatch) {
+    const index = idAway.results.findIndex((id) => id === matchid);
+    idAway.results.splice(index, 1);
+    idAway.results.push(identifiedMatch.id);
+  } else {
+    idAway.results.push(identifiedMatch.id);
+  }
+
+  if (identifiedMatch.result.winner === idHome) {
+    idHome.W += 1;
+    idAway.L += 1;
+  } else if (identifiedMatch.result.winner === idAway) {
+    idHome.L += 1;
+    idAway.W += 1;
+  } else {
+    idHome.T += 1;
+    idAway.T += 1;
+  }
+  identifiedMatch.result.played = true;
 };
 
 const clearGameslot = (id) => {
@@ -123,10 +221,8 @@ const generateMatchesArray = (teamList, tournamentRounds) => {
         );
         if (typeof match === "string") {
           byeteams.push({ i, match });
-          console.log("put one to bye");
         } else {
           matchesArray.push(match);
-          console.log("pushed game to array");
         }
       } else {
         const match = generateMatchObject(
@@ -138,7 +234,6 @@ const generateMatchesArray = (teamList, tournamentRounds) => {
           byeteams.push({ i, match });
         } else {
           matchesArray.push(match);
-          console.log("pushed game to array");
         }
       }
     }

@@ -42,6 +42,7 @@ const emit = defineEmits({
   "change-screen": {},
   "set:activeGameslot": {},
   "set:gamestate": {},
+  "sim-selected": {},
 });
 
 const navigateMainMenu = () => {
@@ -54,94 +55,95 @@ const navigateMainMenu = () => {
 };
 
 const dummyCall = (payload) => {
-  for (const matchid of payload) {
-    simulateMatch(matchid);
-  }
+  emit("sim-selected", payload);
+  // for (const matchid of payload) {
+  //   simulateMatch(matchid);
+  // }
 };
 
-const simulateMatch = (matchid) => {
-  const identifiedMatch = activeTournament.value.tournamentSchedule.find(
-    (match) => match.id === matchid
-  );
-  const homeGoals = Math.round(
-    (identifiedMatch.homeTeam.OFF / identifiedMatch.awayTeam.DEF) *
-      Math.random() *
-      (49 - 0) +
-      -1
-  );
-  const awayGoals = Math.round(
-    (identifiedMatch.awayTeam.OFF / identifiedMatch.homeTeam.DEF) *
-      Math.random() *
-      (49 - 0) +
-      -1
-  );
-  identifiedMatch.score.home = homeGoals;
-  identifiedMatch.score.away = awayGoals;
-  if (homeGoals > awayGoals) {
-    identifiedMatch.result.winner = identifiedMatch.homeTeam;
-    identifiedMatch.result.loser = identifiedMatch.awayTeam;
-  } else if (awayGoals > homeGoals) {
-    identifiedMatch.result.winner = identifiedMatch.awayTeam;
-    identifiedMatch.result.loser = identifiedMatch.homeTeam;
-  } else {
-    identifiedMatch.result.draw = true;
-  }
-  updateTeamRecords(identifiedMatch.id);
-};
+// const simulateMatch = (matchid) => {
+//   const identifiedMatch = activeTournament.value.tournamentSchedule.find(
+//     (match) => match.id === matchid
+//   );
+//   const homeGoals = Math.round(
+//     (identifiedMatch.homeTeam.OFF / identifiedMatch.awayTeam.DEF) *
+//       Math.random() *
+//       (49 - 0) +
+//       -1
+//   );
+//   const awayGoals = Math.round(
+//     (identifiedMatch.awayTeam.OFF / identifiedMatch.homeTeam.DEF) *
+//       Math.random() *
+//       (49 - 0) +
+//       -1
+//   );
+//   identifiedMatch.score.home = homeGoals;
+//   identifiedMatch.score.away = awayGoals;
+//   if (homeGoals > awayGoals) {
+//     identifiedMatch.result.winner = identifiedMatch.homeTeam;
+//     identifiedMatch.result.loser = identifiedMatch.awayTeam;
+//   } else if (awayGoals > homeGoals) {
+//     identifiedMatch.result.winner = identifiedMatch.awayTeam;
+//     identifiedMatch.result.loser = identifiedMatch.homeTeam;
+//   } else {
+//     identifiedMatch.result.draw = true;
+//   }
+//   updateTeamRecords(identifiedMatch.id);
+// };
 
 const activeTournament = ref({ ...props.gamedata.gamedata });
 
-const updateTeamRecords = (matchid) => {
-  const identifiedMatch = activeTournament.value.tournamentSchedule.find(
-    (match) => match.id === matchid
-  );
-  const idHome = activeTournament.value.teamList.find(
-    (team) => team.name === identifiedMatch.homeTeam.name
-  );
-  const idAway = activeTournament.value.teamList.find(
-    (team) => team.name === identifiedMatch.awayTeam.name
-  );
+// const updateTeamRecords = (matchid) => {
+//   const identifiedMatch = activeTournament.value.tournamentSchedule.find(
+//     (match) => match.id === matchid
+//   );
+//   const idHome = activeTournament.value.teamList.find(
+//     (team) => team.name === identifiedMatch.homeTeam.name
+//   );
+//   const idAway = activeTournament.value.teamList.find(
+//     (team) => team.name === identifiedMatch.awayTeam.name
+//   );
 
-  if (identifiedMatch.result.played) {
-    if (identifiedMatch.result.winner === idHome) {
-      idHome.W -= 1;
-      idAway.L -= 1;
-    } else if (identifiedMatch.result.winner === idAway) {
-      idHome.L -= 1;
-      idAway.W -= 1;
-    } else {
-      idHome.T -= 1;
-      idAway.T -= 1;
-    }
-  }
+//   if (identifiedMatch.result.played) {
+//     if (identifiedMatch.result.winner === idHome) {
+//       idHome.W -= 1;
+//       idAway.L -= 1;
+//     } else if (identifiedMatch.result.winner === idAway) {
+//       idHome.L -= 1;
+//       idAway.W -= 1;
+//     } else {
+//       idHome.T -= 1;
+//       idAway.T -= 1;
+//     }
+//   }
 
-  const homeMatch = idHome.results.find((id) => id === matchid);
-  const awayMatch = idAway.results.find((id) => id === matchid);
-  if (homeMatch) {
-    const index = idHome.results.findIndex((id) => id === matchid);
-    idHome.results.splice(index, 1);
-    idHome.results.push(identifiedMatch.id);
-  } else {
-    idHome.results.push(identifiedMatch.id);
-  }
-  if (awayMatch) {
-    const index = idAway.results.findIndex((id) => id === matchid);
-    idAway.results.splice(index, 1);
-    idAway.results.push(identifiedMatch.id);
-  } else {
-    idAway.results.push(identifiedMatch.id);
-  }
+//   const homeMatch = idHome.results.find((id) => id === matchid);
+//   const awayMatch = idAway.results.find((id) => id === matchid);
+//   if (homeMatch) {
+//     const index = idHome.results.findIndex((id) => id === matchid);
+//     idHome.results.splice(index, 1);
+//     idHome.results.push(identifiedMatch.id);
+//   } else {
+//     idHome.results.push(identifiedMatch.id);
+//   }
+//   if (awayMatch) {
+//     const index = idAway.results.findIndex((id) => id === matchid);
+//     idAway.results.splice(index, 1);
+//     idAway.results.push(identifiedMatch.id);
+//   } else {
+//     idAway.results.push(identifiedMatch.id);
+//   }
 
-  if (identifiedMatch.result.winner === idHome) {
-    idHome.W += 1;
-    idAway.L += 1;
-  } else if (identifiedMatch.result.winner === idAway) {
-    idHome.L += 1;
-    idAway.W += 1;
-  } else {
-    idHome.T += 1;
-    idAway.T += 1;
-  }
-  identifiedMatch.result.played = true;
-};
+//   if (identifiedMatch.result.winner === idHome) {
+//     idHome.W += 1;
+//     idAway.L += 1;
+//   } else if (identifiedMatch.result.winner === idAway) {
+//     idHome.L += 1;
+//     idAway.W += 1;
+//   } else {
+//     idHome.T += 1;
+//     idAway.T += 1;
+//   }
+//   identifiedMatch.result.played = true;
+// };
 </script>
