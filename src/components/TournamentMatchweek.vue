@@ -20,10 +20,9 @@
     </tournament-match>
     <slot></slot>
     {{ selectedForSimulation }}
-    <button
-      class="button-green"
-      @click="dispatchSimulationArray"
-    >Simulate selected</button>
+    <button class="button-green" @click="dispatchSimulationArray">
+      Simulate selected
+    </button>
   </div>
 </template>
 
@@ -41,18 +40,14 @@ const props = defineProps({
 
 const emit = defineEmits({
   "dispatch-result": {},
-  "selected-sim": {}
+  "selected-sim": {},
 });
 
 const selectedForSimulation = ref([]);
 
 const dispatchSimulationArray = () => {
-  emit("selected-sim", selectedForSimulation.value)
+  emit("selected-sim", selectedForSimulation.value);
   selectedForSimulation.value.splice(0);
-};
-
-const dispatchResult = (payload) => {
-  emit("dispatch-result", payload);
 };
 
 const currentRound = ref(1);
