@@ -1,6 +1,9 @@
 <template>
   <div class="screen-grey">
-    <label-banner>New Game</label-banner>
+    <div class="flex flex-row rounded-md text-4xl bg-gray-400">
+      <button class="button-red" @click="navigateMainMenu">Main Menu</button>
+      <div class="m-auto">My-Matchday</div>
+    </div>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
         <label
@@ -121,16 +124,12 @@
         >
           Submit form data
         </button>
-        <button type="button" @click="navigateMainMenu">
-          Back to Main Menu
-        </button>
       </div>
     </form>
   </div>
 </template>
 
 <script setup>
-import LabelBanner from "../components/LabelBanner.vue";
 import { ref, watch, computed } from "vue";
 
 const props = defineProps({
