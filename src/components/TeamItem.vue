@@ -5,7 +5,7 @@
     <td class="standings-row">{{ team.W }}</td>
     <td class="standings-row">{{ team.T }}</td>
     <td class="standings-row">{{ team.L }}</td>
-    <!-- <td class="standings-row">{{ PTS }}</td> -->
+    <td class="standings-row">{{ PTS }}</td>
     <!-- <td class="standings-row">{{ S }}</td>
     <td class="standings-row">{{ A }}</td>
     <td class="standings-row">{{ DIFF }}</td> -->
@@ -25,30 +25,12 @@ const G = computed(() => {
   return props.team.results.length;
 });
 
-// const PTS = computed(() => {
-//   return W.value * 3 + T.value;
-// });
+const PTS = computed(() => {
+  return props.team.W * 3 + props.team.T;
+});
 
 // const DIFF = computed(() => {
 //   return S.value - A.value;
-// });
-
-// const W = computed(() => {
-//   return props.team.results.filter((result) => {
-//     return result.result.winner.name === props.team.name;
-//   }).length;
-// });
-
-// const T = computed(() => {
-//   return props.team.results.filter((result) => {
-//     return result.result.draw === true;
-//   }).length;
-// });
-
-// const L = computed(() => {
-//   return props.team.results.filter((result) => {
-//     return result.result.loser.name === props.team.name;
-//   }).length;
 // });
 
 // const S = computed(() => {
