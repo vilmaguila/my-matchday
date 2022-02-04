@@ -70,19 +70,25 @@ const simulateMatch = (matchid) => {
   const idAway = idSlot.gamedata.teamList.find(
     (team) => team.name === identifiedMatch.awayTeam.name
   );
+  console.log(identifiedMatch, idHome, idAway)
 
   if (identifiedMatch.result.played) {
-    if (identifiedMatch.result.winner === idHome) {
+    console.log("match was played earlier")
+    if (identifiedMatch.result.winner === idHome.name) {
+      console.log("hometeam won")
       idHome.W -= 1;
       idAway.L -= 1;
-    } else if (identifiedMatch.result.winner === idAway) {
+    } else if (identifiedMatch.result.winner === idAway.name) {
+      console.log("awayteam had won")
       idHome.L -= 1;
       idAway.W -= 1;
     } else {
+      console.log("was a tie")
       idHome.T -= 1;
       idAway.T -= 1;
     }
   } else {
+    console.log("first sim for this match")
   }
   const homeGoals = Math.round(
     (identifiedMatch.homeTeam.OFF / identifiedMatch.awayTeam.DEF) *
@@ -99,14 +105,19 @@ const simulateMatch = (matchid) => {
   identifiedMatch.score.home = homeGoals;
   identifiedMatch.score.away = awayGoals;
   if (homeGoals > awayGoals) {
-    identifiedMatch.result.winner = identifiedMatch.homeTeam;
-    identifiedMatch.result.loser = identifiedMatch.awayTeam;
+    identifiedMatch.result.winner = identifiedMatch.homeTeam.name;
+    identifiedMatch.result.loser = identifiedMatch.awayTeam.name;
+    identifiedMatch.result.draw = null;
   } else if (awayGoals > homeGoals) {
-    identifiedMatch.result.winner = identifiedMatch.awayTeam;
-    identifiedMatch.result.loser = identifiedMatch.homeTeam;
+    identifiedMatch.result.winner = identifiedMatch.awayTeam.name;
+    identifiedMatch.result.loser = identifiedMatch.homeTeam.name;
+    identifiedMatch.result.draw = null;
   } else {
+    identifiedMatch.result.winner = null;
+    identifiedMatch.result.loser = null;
     identifiedMatch.result.draw = true;
   }
+  console.log(identifiedMatch.result)
   updateTeamRecords(identifiedMatch.id);
 };
 
@@ -142,10 +153,10 @@ const updateTeamRecords = (matchid) => {
     idAway.results.push(identifiedMatch.id);
   }
 
-  if (identifiedMatch.result.winner === idHome) {
+  if (identifiedMatch.result.winner === idHome.name) {
     idHome.W += 1;
     idAway.L += 1;
-  } else if (identifiedMatch.result.winner === idAway) {
+  } else if (identifiedMatch.result.winner === idAway.name) {
     idHome.L += 1;
     idAway.W += 1;
   } else {
