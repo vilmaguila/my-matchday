@@ -6,7 +6,6 @@
     <tournament-match
       v-for="match in filteredMatchweek"
       :match="match"
-      @dispatch-result="dispatchResult"
     >
       <template #selected>
         <input
