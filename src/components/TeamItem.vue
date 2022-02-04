@@ -5,10 +5,10 @@
     <td class="standings-row">{{ team.W }}</td>
     <td class="standings-row">{{ team.T }}</td>
     <td class="standings-row">{{ team.L }}</td>
-    <td class="standings-row">{{ PTS }}</td>
-    <td class="standings-row">{{ S }}</td>
+    <!-- <td class="standings-row">{{ PTS }}</td> -->
+    <!-- <td class="standings-row">{{ S }}</td>
     <td class="standings-row">{{ A }}</td>
-    <td class="standings-row">{{ DIFF }}</td>
+    <td class="standings-row">{{ DIFF }}</td> -->
   </tr>
 </template>
 
