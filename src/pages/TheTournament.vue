@@ -5,14 +5,16 @@
       <div class="m-auto">My-Matchday</div>
     </div>
 
+    <component :is="currentComponent" v-bind="currentProps"></component>
+
     <div class="flex flex-row items-start">
       <tournament-standings
         v-if="gamedata.gamedata"
-        class="w-96 h-auto overflow-y-auto"
+        class="w-96 h-auto"
         :teams="gamedata.gamedata.teamList"
       ></tournament-standings>
       <tournament-matchweek
-        class="w-96 h-96 overflow-y-auto"
+        class="w-96 h-auto"
         v-if="gamedata.gamedata"
         :matches="gamedata.gamedata.tournamentSchedule"
         :rounds="gamedata.gamedata.tournamentWeeks"
@@ -22,8 +24,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  components: { TournamentStandings, TournamentMatchweek },
+};
+</script>
+
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed } from "vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 
@@ -36,6 +44,18 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+});
+
+const currentComponent = ref("tournament-standings");
+
+const currentProps = computed(() => {
+  if (currentComponent.value === "tournament-standings")
+    return { teams: props.gamedata.gamedata.teamList };
+  if (currentComponent.value === "tournament-matchweek")
+    return {
+      matches: props.gamedata.gamedata.tournamentSchedule,
+      rounds: props.gamedata.gamedata.tournamentWeeks,
+    };
 });
 
 const emit = defineEmits({
