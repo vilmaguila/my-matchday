@@ -49,6 +49,10 @@ const selectedForSimulation = ref([]);
 
 const dispatchSimulationArray = () => {
   emit("selected-sim", selectedForSimulation.value);
+  emit("dynamic:tournament-event", {
+    type: "selected-sim",
+    data: selectedForSimulation.value,
+  });
   selectedForSimulation.value.splice(0);
 };
 

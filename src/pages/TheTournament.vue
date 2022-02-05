@@ -5,7 +5,11 @@
       <div class="m-auto">My-Matchday</div>
     </div>
 
-    <component :is="currentComponent" v-bind="currentProps"></component>
+    <component
+      :is="currentComponent"
+      v-bind="currentProps"
+      @dynamic:tournament-event="handleEvent"
+    ></component>
 
     <div class="flex flex-row items-start">
       <tournament-standings
@@ -72,5 +76,11 @@ const navigateMainMenu = () => {
 
 const dummyCall = (payload) => {
   emit("sim-selected", payload);
+};
+
+const handleEvent = (payload) => {
+  if (payload.type === "selected-sim") {
+    emit("sim-selected", payload.data);
+  }
 };
 </script>
