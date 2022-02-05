@@ -10,20 +10,15 @@
       v-bind="currentProps"
       @dynamic:tournament-event="handleEvent"
     ></component>
-
-    <div class="flex flex-row items-start">
-      <tournament-standings
-        v-if="gamedata.gamedata"
-        class="w-96 h-auto"
-        :teams="gamedata.gamedata.teamList"
-      ></tournament-standings>
-      <tournament-matchweek
-        class="w-96 h-auto"
-        v-if="gamedata.gamedata"
-        :matches="gamedata.gamedata.tournamentSchedule"
-        :rounds="gamedata.gamedata.tournamentWeeks"
-        @selected-sim="dummyCall"
-      ></tournament-matchweek>
+    <div class="flex">
+      <button
+        v-for="tab in tabs"
+        :key="tab"
+        :class="['button-green', { active: currentTab === tab }]"
+        @click="currentComponent = tab"
+      >
+        {{ tab }}
+      </button>
     </div>
   </div>
 </template>
@@ -62,6 +57,8 @@ const currentProps = computed(() => {
     };
 });
 
+const tabs = ["tournament-standings", "tournament-matchweek"];
+
 const emit = defineEmits({
   "change-screen": {},
   "set:activeGameslot": {},
@@ -72,10 +69,6 @@ const emit = defineEmits({
 const navigateMainMenu = () => {
   emit("change-screen", "the-main-menu");
   emit("set:activeGameslot", null);
-};
-
-const dummyCall = (payload) => {
-  emit("sim-selected", payload);
 };
 
 const handleEvent = (payload) => {
