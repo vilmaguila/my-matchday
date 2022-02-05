@@ -8,6 +8,6 @@
 
 <style scoped>
 div {
-  @apply flex flex-col bg-indigo-200 rounded-lg m-3;
+  @apply bg-indigo-200 w-full rounded-md p-2 text-4xl text-center;
 }
 </style>

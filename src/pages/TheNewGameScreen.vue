@@ -1,6 +1,9 @@
 <template>
-  <div class="flex flex-col gap-2 bg-gray-200 rounded-xl p-4 m-4">
-    <h1 class="text-center text-2xl">New Game</h1>
+  <div class="screen-grey">
+    <div class="flex flex-row rounded-md text-4xl bg-gray-400">
+      <button class="button-red" @click="navigateMainMenu">Main Menu</button>
+      <div class="m-auto">My-Matchday</div>
+    </div>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
         <label
@@ -120,9 +123,6 @@
           :disabled="!formValidity"
         >
           Submit form data
-        </button>
-        <button type="button" @click="navigateMainMenu">
-          Back to Main Menu
         </button>
       </div>
     </form>

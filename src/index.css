@@ -11,6 +11,14 @@
   @apply bg-gray-400;
 }
 
-.button {
-  @apply bg-green-200 text-white rounded-md py-2 px-4;
+@layer components {
+  .button-green {
+    @apply bg-green-200 text-gray-800 w-full rounded-md m-2 p-2 hover:bg-green-300;
+  }
+  .button-red {
+    @apply bg-red-200 text-gray-800 w-16 rounded-md m-2 p-2 hover:bg-red-300 text-sm;
+  }
+  .screen-grey {
+    @apply flex flex-col gap-2 bg-gray-200 min-h-screen items-stretch mx-auto p-4;
+  }
 }

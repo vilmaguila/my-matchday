@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <button @click="previousRound">Previous</button>
-    <button @click="nextRound">Next</button>
+  <div class="flex flex-col m-4">
+    <div class="flex">
+      <button class="button-green" @click="previousRound">Previous</button>
+      <button class="button-green" @click="nextRound">Next</button>
+    </div>
     <div>ROUND {{ currentRound }}</div>
-    <tournament-match
-      v-for="match in filteredMatchweek"
-      :match="match"
-      @dispatch-result="dispatchResult"
-    >
+    <tournament-match v-for="match in filteredMatchweek" :match="match">
       <template #selected>
         <input
           type="checkbox"
@@ -19,8 +17,14 @@
       </template>
     </tournament-match>
     <slot></slot>
-    {{ selectedForSimulation }}
-    <button @click="dummyCall">Simulate selected</button>
+    <div class="flex">
+      <button class="button-green" @click="dispatchSimulationArray">
+        Simulate selected
+      </button>
+      <button class="button-green" @click="dispatchSimulateMatchweek">
+        Simulate week {{ currentRound }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -38,17 +42,30 @@ const props = defineProps({
 
 const emit = defineEmits({
   "dispatch-result": {},
+  "selected-sim": {},
+  "dynamic:tournament-event": {},
 });
 
 const selectedForSimulation = ref([]);
 
-const dummyCall = () => {
-  alert("Sending array of ids for simulation");
+const dispatchSimulationArray = () => {
+  emit("dynamic:tournament-event", {
+    type: "selected-sim",
+    data: selectedForSimulation.value,
+  });
   selectedForSimulation.value.splice(0);
 };
 
-const dispatchResult = (payload) => {
-  emit("dispatch-result", payload);
+const dispatchSimulateMatchweek = () => {
+  selectedForSimulation.value.splice(0);
+  for (const match of filteredMatchweek.value) {
+    selectedForSimulation.value.push(match.id);
+  }
+  emit("dynamic:tournament-event", {
+    type: "selected-sim",
+    data: selectedForSimulation.value,
+  });
+  selectedForSimulation.value.splice(0);
 };
 
 const currentRound = ref(1);
