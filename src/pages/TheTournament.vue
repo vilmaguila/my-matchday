@@ -5,25 +5,35 @@
       <div class="m-auto">My-Matchday</div>
     </div>
 
-    <div class="flex flex-row items-start">
-      <tournament-standings
-        v-if="gamedata.gamedata"
-        class="w-96 h-auto overflow-y-auto"
-        :teams="gamedata.gamedata.teamList"
-      ></tournament-standings>
-      <tournament-matchweek
-        class="w-96 h-96 overflow-y-auto"
-        v-if="gamedata.gamedata"
-        :matches="gamedata.gamedata.tournamentSchedule"
-        :rounds="gamedata.gamedata.tournamentWeeks"
-        @selected-sim="dummyCall"
-      ></tournament-matchweek>
+    <component
+      :is="currentComponent"
+      v-bind="currentProps"
+      @dynamic:tournament-event="handleEvent"
+    ></component>
+    <div class="flex mx-auto">
+      <button
+        v-for="tab in tabs"
+        :key="tab.name"
+        :class="[
+          'p-2 rounded-md bg-gray-100',
+          { active: currentComponent === tab.name },
+        ]"
+        @click="currentComponent = tab.name"
+      >
+        {{ tab.display }}
+      </button>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  components: { TournamentStandings, TournamentMatchweek },
+};
+</script>
+
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed } from "vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
 
@@ -38,6 +48,23 @@ const props = defineProps({
   },
 });
 
+const currentComponent = ref("tournament-standings");
+
+const currentProps = computed(() => {
+  if (currentComponent.value === "tournament-standings")
+    return { teams: props.gamedata.gamedata.teamList };
+  if (currentComponent.value === "tournament-matchweek")
+    return {
+      matches: props.gamedata.gamedata.tournamentSchedule,
+      rounds: props.gamedata.gamedata.tournamentWeeks,
+    };
+});
+
+const tabs = [
+  { name: "tournament-standings", display: "Standings" },
+  { name: "tournament-matchweek", display: "Gameweek" },
+];
+
 const emit = defineEmits({
   "change-screen": {},
   "set:activeGameslot": {},
@@ -50,7 +77,15 @@ const navigateMainMenu = () => {
   emit("set:activeGameslot", null);
 };
 
-const dummyCall = (payload) => {
-  emit("sim-selected", payload);
+const handleEvent = (payload) => {
+  if (payload.type === "selected-sim") {
+    emit("sim-selected", payload.data);
+  }
 };
 </script>
+
+<style scoped>
+.active {
+  @apply bg-green-400;
+}
+</style>

@@ -43,12 +43,16 @@ const props = defineProps({
 const emit = defineEmits({
   "dispatch-result": {},
   "selected-sim": {},
+  "dynamic:tournament-event": {},
 });
 
 const selectedForSimulation = ref([]);
 
 const dispatchSimulationArray = () => {
-  emit("selected-sim", selectedForSimulation.value);
+  emit("dynamic:tournament-event", {
+    type: "selected-sim",
+    data: selectedForSimulation.value,
+  });
   selectedForSimulation.value.splice(0);
 };
 
@@ -57,7 +61,10 @@ const dispatchSimulateMatchweek = () => {
   for (const match of filteredMatchweek.value) {
     selectedForSimulation.value.push(match.id);
   }
-  emit("selected-sim", selectedForSimulation.value);
+  emit("dynamic:tournament-event", {
+    type: "selected-sim",
+    data: selectedForSimulation.value,
+  });
   selectedForSimulation.value.splice(0);
 };
 
