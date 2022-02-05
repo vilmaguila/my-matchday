@@ -10,14 +10,17 @@
       v-bind="currentProps"
       @dynamic:tournament-event="handleEvent"
     ></component>
-    <div class="flex">
+    <div class="flex mx-auto">
       <button
         v-for="tab in tabs"
-        :key="tab"
-        :class="['button-green', { active: currentTab === tab }]"
-        @click="currentComponent = tab"
+        :key="tab.name"
+        :class="[
+          'p-2 rounded-md bg-gray-100',
+          { active: currentComponent === tab.name },
+        ]"
+        @click="currentComponent = tab.name"
       >
-        {{ tab }}
+        {{ tab.display }}
       </button>
     </div>
   </div>
@@ -57,7 +60,10 @@ const currentProps = computed(() => {
     };
 });
 
-const tabs = ["tournament-standings", "tournament-matchweek"];
+const tabs = [
+  { name: "tournament-standings", display: "Standings" },
+  { name: "tournament-matchweek", display: "Gameweek" },
+];
 
 const emit = defineEmits({
   "change-screen": {},
@@ -77,3 +83,9 @@ const handleEvent = (payload) => {
   }
 };
 </script>
+
+<style scoped>
+.active {
+  @apply bg-green-400;
+}
+</style>
