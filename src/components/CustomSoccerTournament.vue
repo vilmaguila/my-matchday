@@ -1,19 +1,5 @@
 <template>
   <div class="screen-grey">
-    <div class="flex flex-row rounded-md text-4xl bg-gray-400">
-      <button class="button-red" @click="navigateMainMenu">Main Menu</button>
-      <div class="m-auto">My-Matchday</div>
-    </div>
-    <m-select-bar
-      :options="sports"
-      @update:currentOption="selectedSport"
-    ></m-select-bar>
-    <m-select-bar
-      v-if="currentSport"
-      :options="leagueProps()"
-      @update:currentOption="selectedLeague"
-    ></m-select-bar>
-    <component :is="currentSport"></component>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
         <label
@@ -141,7 +127,6 @@
 
 <script setup>
 import { ref, watch, computed } from "vue";
-import MSelectBar from "../components/ui/MSelectBar.vue";
 
 const props = defineProps({
   gameslot: {
@@ -175,36 +160,6 @@ const changeScreen = (payload) => {
     props.gameslot
   );
 };
-
-const currentSport = ref(null);
-const currentLeague = ref(null);
-
-const selectedSport = (payload) => {
-  currentSport.value = payload;
-};
-
-const selectedLeague = (payload) => {
-  currentLeague.value = payload;
-};
-
-const leagueProps = () => {
-  if (currentSport.value === "football") {
-    return [
-      { name: "nfl", display: "National Football League" },
-      { name: "vaahterliiga", display: "Vaahterliiga" },
-    ];
-  }
-  if (currentSport.value === "soccer")
-    return [
-      { name: "epl", display: "English Premier League" },
-      { name: "veikkausliiga", display: "Veikkausliiga" },
-    ];
-};
-
-const sports = [
-  { name: "football", display: "Football" },
-  { name: "soccer", display: "Soccer" },
-];
 
 const tournamentName = ref("");
 const tournamentTeamCount = ref(2);
@@ -338,9 +293,3 @@ const submitForm = () => {
   }
 };
 </script>
-
-<style scoped>
-.active-sport {
-  @apply bg-green-400;
-}
-</style>
