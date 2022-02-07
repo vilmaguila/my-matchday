@@ -10,10 +10,10 @@
     ></m-select-bar>
     <m-select-bar
       v-if="currentSport"
-      :options="leagueProps()"
+      :options="leagueProps"
       @update:currentOption="selectedLeague"
     ></m-select-bar>
-    <component :is="currentSport"></component>
+    <component :is="selectedLeagueForm"></component>
     <form @submit.prevent="submitForm">
       <div class="flex flex-col">
         <label
@@ -139,9 +139,16 @@
   </div>
 </template>
 
+<script>
+export default {
+  components: { CustomSoccerTournament },
+};
+</script>
+
 <script setup>
 import { ref, watch, computed } from "vue";
 import MSelectBar from "../components/ui/MSelectBar.vue";
+import CustomSoccerTournament from "../components/CustomSoccerTournament.vue";
 
 const props = defineProps({
   gameslot: {
@@ -187,19 +194,40 @@ const selectedLeague = (payload) => {
   currentLeague.value = payload;
 };
 
-const leagueProps = () => {
+const selectedLeagueForm = computed(() => {
+  if (currentLeague.value === "nfl") {
+    return "nfl-form";
+  }
+  if (currentLeague.value === "vaahteraliiga") return "vaahteraliiga-form";
+  if (currentLeague.value === "epl") return "epl-form";
+  if (currentLeague.value === "veikkausliiga") return "veikkausliiga-form";
+  if (currentLeague.value === "soccer-custom")
+    return "custom-soccer-tournament";
+});
+
+const leagueProps = computed(() => {
   if (currentSport.value === "football") {
     return [
       { name: "nfl", display: "National Football League" },
-      { name: "vaahterliiga", display: "Vaahterliiga" },
+      { name: "vaahteraliiga", display: "Vaahteraliiga" },
     ];
   }
   if (currentSport.value === "soccer")
     return [
-      { name: "epl", display: "English Premier League" },
-      { name: "veikkausliiga", display: "Veikkausliiga" },
+      {
+        name: "epl",
+        display: "English Premier League",
+      },
+      {
+        name: "veikkausliiga",
+        display: "Veikkausliiga",
+      },
+      {
+        name: "soccer-custom",
+        display: "Custom",
+      },
     ];
-};
+});
 
 const sports = [
   { name: "football", display: "Football" },
