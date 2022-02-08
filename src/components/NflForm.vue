@@ -60,6 +60,11 @@
           />
         </div>
       </div>
+      <m-select-bar
+        :options="conferences"
+        initSelection="afc"
+        @update:currentOption="updateSelectedConference"
+      ></m-select-bar>
       <div>
         <button
           class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
@@ -73,8 +78,9 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, computed } from "vue";
 import { teams } from "../data/nfl.js";
+import MSelectBar from "../components/ui/MSelectBar.vue";
 
 const props = defineProps({
   gameslot: {
@@ -91,6 +97,15 @@ const emit = defineEmits({
 
 const tournamentName = ref("");
 const teamList = ref(teams);
+
+const conferences = [
+  { name: "afc", display: "AFC" },
+  { name: "nfc", display: "NFC" },
+];
+const updateSelectedConference = (payload) => {
+  selectedConference.value = payload;
+};
+const selectedConference = ref("afc");
 
 const tournamentNameValidity = ref("pending");
 
@@ -125,11 +140,7 @@ const generateTeamStrengths = () => {
 };
 
 const submitForm = () => {
-  if (
-    tournamentTeamCount.value &&
-    tournamentRounds.value &&
-    tournamentMode.value
-  ) {
+  if (true) {
     emit("change-screen", "the-tournament");
     emit(
       "form-values",

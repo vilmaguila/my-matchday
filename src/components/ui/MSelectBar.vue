@@ -1,6 +1,7 @@
 <template>
   <div class="flex mx-auto">
     <button
+      type="button"
       v-for="option in options"
       :key="option.name"
       :class="[
@@ -22,11 +23,12 @@ import { ref } from "vue";
 
 const props = defineProps({
   options: {},
+  initSelection: {},
 });
 const emits = defineEmits({
   "update:currentOption": {},
 });
-const currentOption = ref(null);
+const currentOption = ref(props.initSelection);
 const updateCurrentOption = () => {
   emits("update:currentOption", currentOption.value);
 };
