@@ -5,7 +5,7 @@
         <label
           for="tournament_name"
           :class="{ 'text-red-500': tournamentNameValidity === 'invalid' }"
-          >Name</label
+          >Season name</label
         >
         <input
           type="text"
@@ -21,56 +21,6 @@
           Please enter a valid Tournament Name
         </p>
       </div>
-      <div class="flex flex-col">
-        <label for="team_count">Choose the number of teams participating</label>
-        <select
-          v-model.number="tournamentTeamCount"
-          class="bg-gray-300 rounded-sm px-2 py-1"
-        >
-          <option v-for="n in 31">{{ n + 1 }}</option>
-        </select>
-      </div>
-      <div class="flex flex-col">
-        <label for="match_count">Games agains each other</label>
-        <select
-          v-model.number="tournamentRounds"
-          class="bg-gray-300 rounded-sm px-2 py-1"
-        >
-          <option v-for="n in 4" class="bg-green-200">{{ n }}</option>
-        </select>
-      </div>
-      <div class="flex flex-col">
-        <label>Tournament mode</label>
-        <div>
-          <input
-            type="radio"
-            value="league"
-            id="league"
-            v-model="tournamentMode"
-          />
-          <label for="league">League</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            value="groupknockout"
-            id="groupknockout"
-            v-model="tournamentMode"
-            disabled
-          />
-          <label for="groupknockout">Group + Knockout</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            value="knockout"
-            id="knockout"
-            v-model="tournamentMode"
-            disabled
-          />
-          <label for="knockout">Knockout</label>
-        </div>
-      </div>
       <div class="flex flex-col space-y-2">
         <div class="flex space-x-3 wrap">
           <div>Team Names</div>
@@ -79,7 +29,7 @@
             class="bg-gray-700 text-white"
             @click="generateTeamStrengths"
           >
-            Generate team strengths
+            Generate random team strengths
           </button>
         </div>
 
@@ -140,33 +90,9 @@ const emit = defineEmits({
 });
 
 const tournamentName = ref("");
-const tournamentTeamCount = ref(2);
-const tournamentRounds = ref(1);
-const tournamentMode = ref("league");
 const teamList = ref(teams);
 
 const tournamentNameValidity = ref("pending");
-
-watch(tournamentTeamCount, (count, prevCount) => {
-  if (count > prevCount) {
-    for (let step = prevCount + 1; step <= count; step++) {
-      teamList.value.push({
-        name: "Team " + step.toString(),
-        W: 0,
-        T: 0,
-        L: 0,
-        G: 0,
-        A: 0,
-        OVR: null,
-        OFF: null,
-        DEF: null,
-        results: [],
-      });
-    }
-  } else {
-    teamList.value.splice(count);
-  }
-});
 
 const formValidity = computed(() => {
   if (tournamentNameValidity.value === "valid") {
@@ -209,9 +135,6 @@ const submitForm = () => {
       "form-values",
       {
         tournamentName: tournamentName.value,
-        tournamentTeamCount: tournamentTeamCount.value,
-        tournamentRounds: tournamentRounds.value,
-        tournamentMode: tournamentMode.value,
         teamList: teamList.value,
       },
       props.gameslot
