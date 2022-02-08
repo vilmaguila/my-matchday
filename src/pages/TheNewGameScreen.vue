@@ -7,6 +7,7 @@
     <m-select-bar :options="sports" @update:currentOption="selectedSport"></m-select-bar>
     <m-select-bar v-if="currentSport" :options="leagueProps" @update:currentOption="selectedLeague"></m-select-bar>
     <component
+    class="w-full"
       :is="selectedLeagueForm"
       :gameslot="props.gameslot"
       @change-screen="dispatchChangeScreen"
