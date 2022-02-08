@@ -1,0 +1,26 @@
+export const teams = [
+  {
+    name: "ARI",
+    W: 0,
+    T: 0,
+    L: 0,
+    G: 0,
+    A: 0,
+    OVR: null,
+    OFF: null,
+    DEF: null,
+    results: [],
+  },
+  {
+    name: "SEA",
+    W: 0,
+    T: 0,
+    L: 0,
+    G: 0,
+    A: 0,
+    OVR: null,
+    OFF: null,
+    DEF: null,
+    results: [],
+  },
+];

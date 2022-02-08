@@ -4,10 +4,17 @@
       <button class="button-red" @click="navigateMainMenu">Main Menu</button>
       <div class="m-auto">My-Matchday</div>
     </div>
-    <m-select-bar :options="sports" @update:currentOption="selectedSport"></m-select-bar>
-    <m-select-bar v-if="currentSport" :options="leagueProps" @update:currentOption="selectedLeague"></m-select-bar>
+    <m-select-bar
+      :options="sports"
+      @update:currentOption="selectedSport"
+    ></m-select-bar>
+    <m-select-bar
+      v-if="currentSport"
+      :options="leagueProps"
+      @update:currentOption="selectedLeague"
+    ></m-select-bar>
     <component
-    class="w-full"
+      class="w-full"
       :is="selectedLeagueForm"
       :gameslot="props.gameslot"
       @change-screen="dispatchChangeScreen"
@@ -18,7 +25,7 @@
 
 <script>
 export default {
-  components: { CustomSoccerTournament },
+  components: { CustomSoccerTournament, NflForm },
 };
 </script>
 
@@ -26,6 +33,7 @@ export default {
 import { ref, computed } from "vue";
 import MSelectBar from "../components/ui/MSelectBar.vue";
 import CustomSoccerTournament from "../components/CustomSoccerTournament.vue";
+import NflForm from "../components/NflForm.vue";
 
 const props = defineProps({
   gameslot: {
@@ -46,12 +54,12 @@ const navigateMainMenu = () => {
 };
 
 const dispatchChangeScreen = (payload) => {
-  emit("change-screen", payload)
-}
+  emit("change-screen", payload);
+};
 
 const dispatchFormValues = (payload) => {
-  emit("form-values", payload)
-}
+  emit("form-values", payload);
+};
 
 const currentSport = ref(null);
 const currentLeague = ref(null);
