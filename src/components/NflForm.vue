@@ -5,8 +5,7 @@
         <label
           for="tournament_name"
           :class="{ 'text-red-500': tournamentNameValidity === 'invalid' }"
-          >Season name</label
-        >
+        >Season name</label>
         <input
           type="text"
           id="tournament_name"
@@ -17,9 +16,10 @@
             'border-2 border-red-500': tournamentNameValidity === 'invalid',
           }"
         />
-        <p v-if="tournamentNameValidity === 'invalid'" class="text-red-500">
-          Please enter a valid Tournament Name
-        </p>
+        <p
+          v-if="tournamentNameValidity === 'invalid'"
+          class="text-red-500"
+        >Please enter a valid Tournament Name</p>
       </div>
       <div class="flex flex-col space-y-2">
         <div class="flex space-x-3 wrap">
@@ -28,36 +28,35 @@
             type="button"
             class="bg-gray-700 text-white"
             @click="generateTeamStrengths"
-          >
-            Generate random team strengths
-          </button>
+          >Generate random team strengths</button>
         </div>
-
-        <div class="flex space-x-2" v-for="(team, index) in teamList">
-          <input
-            :placeholder="index"
-            type="text"
-            v-model="teamList[index].name"
-            class="bg-gray-300 py-1 px-2"
-          />
-          <input
-            placeholder="OVR"
-            type="text"
-            v-model.number="teamList[index].OVR"
-            class="bg-gray-300 py-1 px-2 w-10 text-xs"
-          />
-          <input
-            placeholder="OFF"
-            type="text"
-            v-model.number="teamList[index].OFF"
-            class="bg-gray-300 py-1 px-2 w-10 text-xs"
-          />
-          <input
-            placeholder="DEF"
-            type="text"
-            v-model.number="teamList[index].DEF"
-            class="bg-gray-300 py-1 px-2 w-10 text-xs"
-          />
+        <div v-for="division in divisionGroups">
+          <div class="flex space-x-2" v-for="(team, index) in division">
+            <input
+              :placeholder="index"
+              type="text"
+              v-model="teamList[index].name"
+              class="bg-gray-300 py-1 px-2"
+            />
+            <input
+              placeholder="OVR"
+              type="text"
+              v-model.number="teamList[index].OVR"
+              class="bg-gray-300 py-1 px-2 w-10 text-xs"
+            />
+            <input
+              placeholder="OFF"
+              type="text"
+              v-model.number="teamList[index].OFF"
+              class="bg-gray-300 py-1 px-2 w-10 text-xs"
+            />
+            <input
+              placeholder="DEF"
+              type="text"
+              v-model.number="teamList[index].DEF"
+              class="bg-gray-300 py-1 px-2 w-10 text-xs"
+            />
+          </div>
         </div>
       </div>
       <m-select-bar
@@ -69,9 +68,7 @@
         <button
           class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
           :disabled="!formValidity"
-        >
-          Submit form data
-        </button>
+        >Submit form data</button>
       </div>
     </form>
   </div>
@@ -95,6 +92,17 @@ const emit = defineEmits({
   "set:activeGameslot": null,
 });
 
+const groupBy = (arr, key) => {
+  return arr.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+}
+
+const divisionGroups = computed(() => {
+  return groupBy(teamList.value, 'division')
+})
+
 const tournamentName = ref("");
 const teamList = ref(teams);
 
@@ -106,6 +114,10 @@ const updateSelectedConference = (payload) => {
   selectedConference.value = payload;
 };
 const selectedConference = ref("afc");
+
+const filteredDivision = (division) => {
+  return teamList.value.filter(team => team.division === division)
+}
 
 const tournamentNameValidity = ref("pending");
 

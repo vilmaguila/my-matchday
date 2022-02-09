@@ -1,6 +1,7 @@
 export const teams = [
   {
     name: "ARI",
+    division: 'nfcw',
     W: 0,
     T: 0,
     L: 0,
@@ -13,6 +14,7 @@ export const teams = [
   },
   {
     name: "SEA",
+    division: 'nfcw',
     W: 0,
     T: 0,
     L: 0,
@@ -25,6 +27,7 @@ export const teams = [
   },
   {
     name: "SF",
+    division: 'nfcw',
     W: 0,
     T: 0,
     L: 0,
@@ -37,6 +40,7 @@ export const teams = [
   },
   {
     name: "LAR",
+    division: 'nfcw',
     W: 0,
     T: 0,
     L: 0,
@@ -49,6 +53,7 @@ export const teams = [
   },
   {
     name: "TB",
+    division: 'nfcs',
     W: 0,
     T: 0,
     L: 0,
@@ -61,6 +66,7 @@ export const teams = [
   },
   {
     name: "ATL",
+    division: 'nfcs',
     W: 0,
     T: 0,
     L: 0,
@@ -73,6 +79,7 @@ export const teams = [
   },
   {
     name: "CAR",
+    division: 'nfcs',
     W: 0,
     T: 0,
     L: 0,
@@ -85,6 +92,7 @@ export const teams = [
   },
   {
     name: "NO",
+    division: 'nfcs',
     W: 0,
     T: 0,
     L: 0,
@@ -97,6 +105,7 @@ export const teams = [
   },
   {
     name: "NYG",
+    division: 'nfce',
     W: 0,
     T: 0,
     L: 0,
@@ -109,6 +118,7 @@ export const teams = [
   },
   {
     name: "WAS",
+    division: 'nfce',
     W: 0,
     T: 0,
     L: 0,
@@ -121,6 +131,7 @@ export const teams = [
   },
   {
     name: "DAL",
+    division: 'nfce',
     W: 0,
     T: 0,
     L: 0,
@@ -133,6 +144,7 @@ export const teams = [
   },
   {
     name: "PHI",
+    division: 'nfce',
     W: 0,
     T: 0,
     L: 0,
@@ -145,6 +157,7 @@ export const teams = [
   },
   {
     name: "CHI",
+    division: 'nfcn',
     W: 0,
     T: 0,
     L: 0,
@@ -157,6 +170,7 @@ export const teams = [
   },
   {
     name: "GB",
+    division: 'nfcn',
     W: 0,
     T: 0,
     L: 0,
@@ -169,6 +183,7 @@ export const teams = [
   },
   {
     name: "DET",
+    division: 'nfcn',
     W: 0,
     T: 0,
     L: 0,
@@ -181,6 +196,7 @@ export const teams = [
   },
   {
     name: "MIN",
+    division: 'nfcn',
     W: 0,
     T: 0,
     L: 0,
@@ -193,6 +209,7 @@ export const teams = [
   },
   {
     name: "NE",
+    division: 'afce',
     W: 0,
     T: 0,
     L: 0,
@@ -205,6 +222,7 @@ export const teams = [
   },
   {
     name: "NYJ",
+    division: 'afce',
     W: 0,
     T: 0,
     L: 0,
@@ -217,6 +235,7 @@ export const teams = [
   },
   {
     name: "BUF",
+    division: 'afce',
     W: 0,
     T: 0,
     L: 0,
@@ -229,6 +248,7 @@ export const teams = [
   },
   {
     name: "MIA",
+    division: 'afce',
     W: 0,
     T: 0,
     L: 0,
@@ -241,6 +261,7 @@ export const teams = [
   },
   {
     name: "DEN",
+    division: 'afcw',
     W: 0,
     T: 0,
     L: 0,
@@ -253,6 +274,7 @@ export const teams = [
   },
   {
     name: "KC",
+    division: 'afcw',
     W: 0,
     T: 0,
     L: 0,
@@ -265,6 +287,7 @@ export const teams = [
   },
   {
     name: "LV",
+    division: 'afcw',
     W: 0,
     T: 0,
     L: 0,
@@ -277,6 +300,7 @@ export const teams = [
   },
   {
     name: "LAC",
+    division: 'afcw',
     W: 0,
     T: 0,
     L: 0,
@@ -289,6 +313,7 @@ export const teams = [
   },
   {
     name: "CIN",
+    division: 'afcn',
     W: 0,
     T: 0,
     L: 0,
@@ -301,6 +326,7 @@ export const teams = [
   },
   {
     name: "PIT",
+    division: 'afcn',
     W: 0,
     T: 0,
     L: 0,
@@ -313,6 +339,7 @@ export const teams = [
   },
   {
     name: "CLE",
+    division: 'afcn',
     W: 0,
     T: 0,
     L: 0,
@@ -325,6 +352,7 @@ export const teams = [
   },
   {
     name: "BAL",
+    division: 'afcn',
     W: 0,
     T: 0,
     L: 0,
@@ -337,6 +365,7 @@ export const teams = [
   },
   {
     name: "HOU",
+    division: 'afcs',
     W: 0,
     T: 0,
     L: 0,
@@ -349,6 +378,7 @@ export const teams = [
   },
   {
     name: "JAX",
+    division: 'afcs',
     W: 0,
     T: 0,
     L: 0,
@@ -361,6 +391,7 @@ export const teams = [
   },
   {
     name: "TEN",
+    division: 'afcs',
     W: 0,
     T: 0,
     L: 0,
@@ -373,6 +404,7 @@ export const teams = [
   },
   {
     name: "IND",
+    division: 'afcs',
     W: 0,
     T: 0,
     L: 0,
