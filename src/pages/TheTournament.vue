@@ -23,6 +23,8 @@
         {{ tab.display }}
       </button>
     </div>
+    <button @click="playOneDown">Play one down</button>
+    <div>{{ result }}</div>
   </div>
 </template>
 
@@ -36,6 +38,7 @@ export default {
 import { ref, computed } from "vue";
 import TournamentStandings from "../components/TournamentStandings.vue";
 import TournamentMatchweek from "../components/TournamentMatchweek.vue";
+import { useNflGame } from "../util/nflgamesimulation";
 
 const props = defineProps({
   gameslot: {
@@ -47,6 +50,14 @@ const props = defineProps({
     required: true,
   },
 });
+
+const { playDown } = useNflGame();
+
+const result = ref(null);
+
+const playOneDown = () => {
+  result.value = playDown();
+};
 
 const currentComponent = ref("tournament-standings");
 

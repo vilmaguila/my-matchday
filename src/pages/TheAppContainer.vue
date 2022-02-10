@@ -70,37 +70,37 @@ const simulateMatch = (matchid) => {
   const idAway = idSlot.gamedata.teamList.find(
     (team) => team.name === identifiedMatch.awayTeam.name
   );
-  console.log(identifiedMatch, idHome, idAway)
+  console.log(identifiedMatch, idHome, idAway);
 
   if (identifiedMatch.result.played) {
-    console.log("match was played earlier")
+    console.log("match was played earlier");
     if (identifiedMatch.result.winner === idHome.name) {
-      console.log("hometeam won")
+      console.log("hometeam won");
       idHome.W -= 1;
       idAway.L -= 1;
     } else if (identifiedMatch.result.winner === idAway.name) {
-      console.log("awayteam had won")
+      console.log("awayteam had won");
       idHome.L -= 1;
       idAway.W -= 1;
     } else {
-      console.log("was a tie")
+      console.log("was a tie");
       idHome.T -= 1;
       idAway.T -= 1;
     }
   } else {
-    console.log("first sim for this match")
+    console.log("first sim for this match");
   }
   const homeGoals = Math.round(
     (identifiedMatch.homeTeam.OFF / identifiedMatch.awayTeam.DEF) *
-    Math.random() *
-    (49 - 0) +
-    -1
+      Math.random() *
+      (49 - 0) +
+      -1
   );
   const awayGoals = Math.round(
     (identifiedMatch.awayTeam.OFF / identifiedMatch.homeTeam.DEF) *
-    Math.random() *
-    (49 - 0) +
-    -1
+      Math.random() *
+      (49 - 0) +
+      -1
   );
   identifiedMatch.score.home = homeGoals;
   identifiedMatch.score.away = awayGoals;
@@ -117,7 +117,7 @@ const simulateMatch = (matchid) => {
     identifiedMatch.result.loser = null;
     identifiedMatch.result.draw = true;
   }
-  console.log(identifiedMatch.result)
+  console.log(identifiedMatch.result);
   updateTeamRecords(identifiedMatch.id);
 };
 
@@ -134,7 +134,6 @@ const updateTeamRecords = (matchid) => {
   const idAway = idSlot.gamedata.teamList.find(
     (team) => team.name === identifiedMatch.awayTeam.name
   );
-
 
   const homeMatch = idHome.results.find((id) => id === matchid);
   const awayMatch = idAway.results.find((id) => id === matchid);
