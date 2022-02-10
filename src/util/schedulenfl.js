@@ -8,14 +8,14 @@
  * @return {number} rounds the amount of times teams face each other
  */
 
-const createRoundRobinSchedule = (teams, rounds) => {
+const createRoundRobinSchedule = (teams, trounds) => {
   const matchesArray = [];
   const byeteams = [];
   const localteams = [...teams];
   let roundMatchups = localteams.length / 2;
-  let rounds = (localteams.length - 1) * rounds;
+  let rounds = (localteams.length - 1) * trounds;
   if (localteams.length % 2 !== 0) {
-    rounds = localteams.length * rounds;
+    rounds = localteams.length * trounds;
     localteams.push("BYE");
   }
   for (let i = 1; i <= rounds; i++) {
@@ -81,8 +81,14 @@ const generateMatchObject = (home, away, round) => {
   }
 };
 
-let matchID = 0;
+import { v4 as uuidv4 } from 'uuid';
 const getMatchID = () => {
-  matchID += 1;
+  let matchID = uuidv4();
   return matchID;
 };
+
+export {
+  getMatchID,
+  generateMatchObject,
+  createRoundRobinSchedule,
+}

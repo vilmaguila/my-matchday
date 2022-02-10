@@ -24,6 +24,7 @@ import { ref, reactive, computed, onMounted, watch } from "vue";
 import TheTournament from "../pages/TheTournament.vue";
 import TheMainMenu from "../pages/TheMainMenu.vue";
 import TheNewGameScreen from "./TheNewGameScreen.vue";
+import { getMatchID } from "../util/schedulenfl";
 
 const activeScreen = ref("the-main-menu");
 const activeGameSlot = ref(null);
@@ -284,9 +285,9 @@ const generateMatchObject = (home, away, round) => {
   }
 };
 
-let matchID = 0;
-const getMatchID = () => {
-  matchID += 1;
-  return matchID;
-};
+// let matchID = 0;
+// const getMatchID = () => {
+//   matchID += 1;
+//   return matchID;
+// };
 </script>
