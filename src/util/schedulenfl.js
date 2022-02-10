@@ -2,12 +2,11 @@
  * Returns x raised to the n-th power.
  *
  * @param {Array} teams Team objects that participate in schedule.
- * @param {number} rounds How many times the teams face each other.
+ * @param {number} trounds How many times the teams face each other.
  * @return {Array} Array of objects containing games.
- * @return {Array} Array of teams on byeweeks
- * @return {number} rounds the amount of times teams face each other
+ * @return {Array} Array of objects containeing week and and teams on bye
+ * @return {number} amount of rounds in the tournament/league/cup/season
  */
-
 const createRoundRobinSchedule = (teams, trounds) => {
   const matchesArray = [];
   const byeteams = [];
@@ -27,7 +26,7 @@ const createRoundRobinSchedule = (teams, trounds) => {
           i
         );
         if (typeof match === "string") {
-          byeteams.push({ i, match });
+          byeteams.push({ week: i, teams: match });
         } else {
           matchesArray.push(match);
         }
@@ -38,7 +37,7 @@ const createRoundRobinSchedule = (teams, trounds) => {
           i
         );
         if (!match.hasOwnProperty("score")) {
-          byeteams.push({ i, match });
+          byeteams.push({ week: i, teams: match });
         } else {
           matchesArray.push(match);
         }
