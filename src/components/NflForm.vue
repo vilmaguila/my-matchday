@@ -30,30 +30,30 @@
             @click="generateTeamStrengths"
           >Generate random team strengths</button>
         </div>
-        <div v-for="division in divisionGroups">
+        <div v-for="division in dividedConferencesDivisions">
           <div class="flex space-x-2" v-for="(team, index) in division">
             <input
               :placeholder="index"
               type="text"
-              v-model="teamList[index].name"
+              v-model="division[index].name"
               class="bg-gray-300 py-1 px-2"
             />
             <input
               placeholder="OVR"
               type="text"
-              v-model.number="teamList[index].OVR"
+              v-model.number="division[index].OVR"
               class="bg-gray-300 py-1 px-2 w-10 text-xs"
             />
             <input
               placeholder="OFF"
               type="text"
-              v-model.number="teamList[index].OFF"
+              v-model.number="division[index].OFF"
               class="bg-gray-300 py-1 px-2 w-10 text-xs"
             />
             <input
               placeholder="DEF"
               type="text"
-              v-model.number="teamList[index].DEF"
+              v-model.number="division[index].DEF"
               class="bg-gray-300 py-1 px-2 w-10 text-xs"
             />
           </div>
@@ -114,6 +114,25 @@ const updateSelectedConference = (payload) => {
   selectedConference.value = payload;
 };
 const selectedConference = ref("afc");
+const selectedConferenceTeams = computed(() => {
+  return teamList.value.filter(
+    (team) => team.conference === selectedConference.value
+  );
+});
+const dividedConferencesDivisions = computed(() => {
+  return groupBy(selectedConferenceTeams.value, "division");
+});
+
+var groupBy = (xs, key) => {
+  return xs.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
+const filterDivision = (division) => {
+  return teamList.value.filter((team) => team.division === division);
+};
 
 const filteredDivision = (division) => {
   return teamList.value.filter(team => team.division === division)
