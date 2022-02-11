@@ -10,7 +10,6 @@
     @click="isOpen = !isOpen"
   >
     <slot name="selected"></slot>
-    <div>ID: {{ match.id }}</div>
     <div>Week: {{ match.round }}</div>
     <div>{{ match.homeTeam.name }}</div>
     <div>{{ match.score.home }}</div>

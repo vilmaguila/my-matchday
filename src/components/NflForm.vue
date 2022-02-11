@@ -5,8 +5,7 @@
         <label
           for="tournament_name"
           :class="{ 'text-red-500': tournamentNameValidity === 'invalid' }"
-          >Name</label
-        >
+        >Season name</label>
         <input
           type="text"
           id="tournament_name"
@@ -17,59 +16,10 @@
             'border-2 border-red-500': tournamentNameValidity === 'invalid',
           }"
         />
-        <p v-if="tournamentNameValidity === 'invalid'" class="text-red-500">
-          Please enter a valid Tournament Name
-        </p>
-      </div>
-      <div class="flex flex-col">
-        <label for="team_count">Choose the number of teams participating</label>
-        <select
-          v-model.number="tournamentTeamCount"
-          class="bg-gray-300 rounded-sm px-2 py-1"
-        >
-          <option v-for="n in 31">{{ n + 1 }}</option>
-        </select>
-      </div>
-      <div class="flex flex-col">
-        <label for="match_count">Games agains each other</label>
-        <select
-          v-model.number="tournamentRounds"
-          class="bg-gray-300 rounded-sm px-2 py-1"
-        >
-          <option v-for="n in 4" class="bg-green-200">{{ n }}</option>
-        </select>
-      </div>
-      <div class="flex flex-col">
-        <label>Tournament mode</label>
-        <div>
-          <input
-            type="radio"
-            value="league"
-            id="league"
-            v-model="tournamentMode"
-          />
-          <label for="league">League</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            value="groupknockout"
-            id="groupknockout"
-            v-model="tournamentMode"
-            disabled
-          />
-          <label for="groupknockout">Group + Knockout</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            value="knockout"
-            id="knockout"
-            v-model="tournamentMode"
-            disabled
-          />
-          <label for="knockout">Knockout</label>
-        </div>
+        <p
+          v-if="tournamentNameValidity === 'invalid'"
+          class="text-red-500"
+        >Please enter a valid Tournament Name</p>
       </div>
       <div class="flex flex-col space-y-2">
         <div class="flex space-x-3 wrap">
@@ -78,53 +28,56 @@
             type="button"
             class="bg-gray-700 text-white"
             @click="generateTeamStrengths"
-          >
-            Generate team strengths
-          </button>
+          >Generate random team strengths</button>
         </div>
-
-        <div class="flex space-x-2" v-for="(team, index) in teamList">
-          <input
-            :placeholder="index"
-            type="text"
-            v-model="teamList[index].name"
-            class="bg-gray-300 py-1 px-2"
-          />
-          <input
-            placeholder="OVR"
-            type="text"
-            v-model.number="teamList[index].OVR"
-            class="bg-gray-300 py-1 px-2 w-10 text-xs"
-          />
-          <input
-            placeholder="OFF"
-            type="text"
-            v-model.number="teamList[index].OFF"
-            class="bg-gray-300 py-1 px-2 w-10 text-xs"
-          />
-          <input
-            placeholder="DEF"
-            type="text"
-            v-model.number="teamList[index].DEF"
-            class="bg-gray-300 py-1 px-2 w-10 text-xs"
-          />
+        <div v-for="division in dividedConferencesDivisions">
+          <div class="flex space-x-2" v-for="(team, index) in division">
+            <input
+              :placeholder="index"
+              type="text"
+              v-model="division[index].name"
+              class="bg-gray-300 py-1 px-2"
+            />
+            <input
+              placeholder="OVR"
+              type="text"
+              v-model.number="division[index].OVR"
+              class="bg-gray-300 py-1 px-2 w-10 text-xs"
+            />
+            <input
+              placeholder="OFF"
+              type="text"
+              v-model.number="division[index].OFF"
+              class="bg-gray-300 py-1 px-2 w-10 text-xs"
+            />
+            <input
+              placeholder="DEF"
+              type="text"
+              v-model.number="division[index].DEF"
+              class="bg-gray-300 py-1 px-2 w-10 text-xs"
+            />
+          </div>
         </div>
       </div>
+      <m-select-bar
+        :options="conferences"
+        initSelection="afc"
+        @update:currentOption="updateSelectedConference"
+      ></m-select-bar>
       <div>
         <button
           class="bg-blue-200 rounded-md p-2 m-2 disabled:opacity-30"
           :disabled="!formValidity"
-        >
-          Submit form data
-        </button>
+        >Submit form data</button>
       </div>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, computed } from "vue";
 import { teams } from "../data/nfl.js";
+import MSelectBar from "../components/ui/MSelectBar.vue";
 
 const props = defineProps({
   gameslot: {
@@ -139,34 +92,46 @@ const emit = defineEmits({
   "set:activeGameslot": null,
 });
 
+const divisionGroups = computed(() => {
+  return groupBy(teamList.value, 'division')
+})
+
 const tournamentName = ref("");
-const tournamentTeamCount = ref(2);
-const tournamentRounds = ref(1);
-const tournamentMode = ref("league");
 const teamList = ref(teams);
 
-const tournamentNameValidity = ref("pending");
-
-watch(tournamentTeamCount, (count, prevCount) => {
-  if (count > prevCount) {
-    for (let step = prevCount + 1; step <= count; step++) {
-      teamList.value.push({
-        name: "Team " + step.toString(),
-        W: 0,
-        T: 0,
-        L: 0,
-        G: 0,
-        A: 0,
-        OVR: null,
-        OFF: null,
-        DEF: null,
-        results: [],
-      });
-    }
-  } else {
-    teamList.value.splice(count);
-  }
+const conferences = [
+  { name: "afc", display: "AFC" },
+  { name: "nfc", display: "NFC" },
+];
+const updateSelectedConference = (payload) => {
+  selectedConference.value = payload;
+};
+const selectedConference = ref("afc");
+const selectedConferenceTeams = computed(() => {
+  return teamList.value.filter(
+    (team) => team.conference === selectedConference.value
+  );
 });
+const dividedConferencesDivisions = computed(() => {
+  return groupBy(selectedConferenceTeams.value, "division");
+});
+
+var groupBy = (xs, key) => {
+  return xs.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
+const filterDivision = (division) => {
+  return teamList.value.filter((team) => team.division === division);
+};
+
+const filteredDivision = (division) => {
+  return teamList.value.filter(team => team.division === division)
+}
+
+const tournamentNameValidity = ref("pending");
 
 const formValidity = computed(() => {
   if (tournamentNameValidity.value === "valid") {
@@ -199,19 +164,12 @@ const generateTeamStrengths = () => {
 };
 
 const submitForm = () => {
-  if (
-    tournamentTeamCount.value &&
-    tournamentRounds.value &&
-    tournamentMode.value
-  ) {
+  if (true) {
     emit("change-screen", "the-tournament");
     emit(
       "form-values",
       {
         tournamentName: tournamentName.value,
-        tournamentTeamCount: tournamentTeamCount.value,
-        tournamentRounds: tournamentRounds.value,
-        tournamentMode: tournamentMode.value,
         teamList: teamList.value,
       },
       props.gameslot
