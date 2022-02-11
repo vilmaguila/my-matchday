@@ -25,6 +25,8 @@
     </div>
     <button @click="playOneDown">Play one down</button>
     <div>{{ result }}</div>
+    <div>{{ gameClock}}</div>
+    <div>{{ ballPosition }}</div>
   </div>
 </template>
 
@@ -51,7 +53,7 @@ const props = defineProps({
   },
 });
 
-const { playDown } = useNflGame();
+const { playDown, ballPosition, gameClock } = useNflGame();
 
 const result = ref(null);
 
