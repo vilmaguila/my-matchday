@@ -13,6 +13,8 @@ export function useNflGame() {
       away: 0,
     },
     time: 3600,
+    plays: [],
+    stats: {},
   });
 
   const ballPosition = computed(() => {
@@ -57,7 +59,7 @@ export function useNflGame() {
     if (timeLeft) {
       if (playCall === "run") {
         const random = Math.random();
-        const absoluteGain = getYardsCompletion("run");
+        const absoluteGain = getRunYards();
         gain = absoluteGain;
         if (random < 0.96) {
           playResult = "gain";
@@ -71,7 +73,7 @@ export function useNflGame() {
         const random = Math.random();
         if (random < 0.55) {
           playResult = "completion";
-          const absoluteGain = getYardsCompletion("pass");
+          const absoluteGain = getCompletedPassYards();
           gain = absoluteGain;
           gamestate.time -= 34;
         } else if (0.55 < random && random < 0.9) {
@@ -103,15 +105,82 @@ export function useNflGame() {
   return { gamestate: readonly(gamestate), playDown, ballPosition, gameClock };
 }
 
-const getYardsCompletion = (playtype) => {
-  if (playtype === "pass") {
-    const min = -2;
-    const max = 33;
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-  if (playtype === "run") {
-    const min = -3;
-    const max = 18;
-    return Math.floor(Math.random() * (max - min + 1) + min);
+const getCompletedPassYards = () => {
+  const completedYardsEvents = ["1", "2", "3"];
+  const completedYardsProbabilities = [70, 20, 10];
+  const completedYards =
+    completedYardsEvents[simulateEvent(completedYardsProbabilities)];
+  if (completedYards === "1") {
+    return getRandomYardsInRange(0, 10);
+  } else if (completedYards === "2") {
+    return getRandomYardsInRange(11, 30);
+  } else {
+    return getRandomYardsInRange(30, 100);
   }
 };
+
+const getRunYards = () => {
+  const runYardsEvents = ["1", "2", "3"];
+  const runYardsProbabilities = [90, 7, 3];
+  const runYards = runYardsEvents[simulateEvent(runYardsProbabilities)];
+  if (runYards === "1") {
+    return getRandomYardsInRange(-5, 10);
+  } else if (runYards === "2") {
+    return getRandomYardsInRange(11, 30);
+  } else {
+    return getRandomYardsInRange(30, 100);
+  }
+};
+
+const getKickoffReturnYards = () => {
+  const returnYardsEvents = ["1", "2", "3"];
+  const returnYardsProbabilities = [80, 15, 5];
+};
+
+const getTurnoverReturnYards = () => {
+  const returnYardsEvents = ["1", "2", "3"];
+  const returnYardsProbabilities = [80, 15, 5];
+  const returnYards =
+    returnYardsEvents[simulateEvent(returnYardsProbabilities)];
+  if (returnYards === "1") {
+    return getRandomYardsInRange(0, 10);
+  } else if (returnYards === "2") {
+    return getRandomYardsInRange(11, 30);
+  } else {
+    return getRandomYardsInRange(30, 100);
+  }
+};
+
+const getRandomYardsInRange = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+function simulateEvent(chances) {
+  var sum = 0;
+  chances.forEach(function (chance) {
+    sum += chance;
+  });
+  var rand = Math.random();
+  var chance = 0;
+  for (var i = 0; i < chances.length; i++) {
+    chance += chances[i] / sum;
+    if (rand < chance) {
+      return i;
+    }
+  }
+
+  // should never be reached unless sum of probabilities is less than 1
+  // due to all being zero or some being negative probabilities
+  return -1;
+}
+
+// // simulate weighted dice where 6 is twice as likely as any other face
+// // using multiples of likelihood
+// console.log("Rolled a " + (simulateEvent([1, 1, 1, 1, 1, 2]) + 1)); // Rolled a 1
+
+// // using probabilities
+// console.log(
+//   "Rolled a " + (simulateEvent([1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 2 / 7]) + 1)
+// ); // Rolled a 6
