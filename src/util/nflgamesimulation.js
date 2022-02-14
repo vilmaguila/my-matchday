@@ -17,21 +17,32 @@ export function useNflGame() {
 
   const ballPosition = computed(() => {
     if (gamestate.ballPosition < 50) {
-      return "ball at hometeam " + gamestate.ballPosition + " yard line"
+      return "ball at hometeam " + gamestate.ballPosition + " yard line";
     }
     if (gamestate.ballPosition > 50) {
-      return "ball at hometeam " + 100 - gamestate.ballPosition + " yard line"
+      return "ball at hometeam " + 100 - gamestate.ballPosition + " yard line";
     } else {
-      return "ball at 50 yard line"
+      return "ball at 50 yard line";
     }
   });
 
   const gameClock = computed(() => {
     if (gamestate.time > 2700) {
-      let timeleft =  gamestate.time - 2700
-      return "1st quarter, time left: " + timeleft
+      let timeleft = gamestate.time - 2700;
+      return "1st quarter, time left: " + timeleft;
     }
-  })
+    if (1800 < gamestate.time && gamestate.time < 2700) {
+      let timeleft = gamestate.time - 1800;
+      return "2nd quarter, time left: " + timeleft;
+    }
+    if (900 < gamestate.time && gamestate.time < 1800) {
+      let timeleft = gamestate.time - 900;
+      return "3rd quarter, time left: " + timeleft;
+    }
+    if (gamestate.time < 900) {
+      return "4th quarter, time left: " + timeleft;
+    }
+  });
 
   const playDown = () => {
     let playCall = Math.random() < 0.5 ? "run" : "pass";
@@ -39,42 +50,54 @@ export function useNflGame() {
     let timeLeft = true;
     let gain = 0;
     if (gamestate.time > 0) {
-      timeLeft = true
+      timeLeft = true;
     } else {
-      timeLeft = false
+      timeLeft = false;
     }
     if (timeLeft) {
       if (playCall === "run") {
         const random = Math.random();
-        const absoluteGain = getYardsCompletion("run")
-        gain = absoluteGain
+        const absoluteGain = getYardsCompletion("run");
+        gain = absoluteGain;
         if (random < 0.96) {
           playResult = "gain";
+          gamestate.time -= 33;
         } else {
           playResult = "fumble";
+          gamestate.time -= 5;
         }
       }
       if (playCall === "pass") {
         const random = Math.random();
         if (random < 0.55) {
           playResult = "completion";
-          const absoluteGain = getYardsCompletion("pass")
-          gain = absoluteGain
-          gamestate.time -= 34
+          const absoluteGain = getYardsCompletion("pass");
+          gain = absoluteGain;
+          gamestate.time -= 34;
         } else if (0.55 < random && random < 0.9) {
           playResult = "incompletion";
-          gamestate.time -= 4
+          gamestate.time -= 4;
         } else if (0.9 < random && random < 0.92) {
           playResult = "interception";
+          gamestate.time -= 4;
         } else if (0.92 < random && random < 0.94) {
           playResult = "fumble";
+          gamestate.time -= 6;
         } else {
           playResult = "sack";
+          gamestate.time -= 34;
         }
       }
     }
 
-    return "it is a " + playCall + " play, that results in " + playResult + ", with gain of " + gain;
+    return (
+      "it is a " +
+      playCall +
+      " play, that results in " +
+      playResult +
+      ", with gain of " +
+      gain
+    );
   };
 
   return { gamestate: readonly(gamestate), playDown, ballPosition, gameClock };
@@ -82,13 +105,13 @@ export function useNflGame() {
 
 const getYardsCompletion = (playtype) => {
   if (playtype === "pass") {
-    const min = -2
-    const max = 33
+    const min = -2;
+    const max = 33;
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
   if (playtype === "run") {
-    const min = -3
-    const max = 18
+    const min = -3;
+    const max = 18;
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
-}
+};
