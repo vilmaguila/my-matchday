@@ -3,7 +3,11 @@ import { ref, reactive, readonly, computed } from "vue";
 export function useNflGame() {
   const gamestate = reactive({
     //home endzone at 0, away endzone at 100
-    ballPosition: 35,
+    ballAbsolutePosition: 35,
+    ballRelativePosition: {
+      side: "own",
+      yds: 35,
+    },
     distangeToEndzone: 65,
     teamInPossession: "home",
     down: 1,
@@ -18,11 +22,18 @@ export function useNflGame() {
   });
 
   const ballPosition = computed(() => {
-    if (gamestate.ballPosition < 50) {
-      return "ball at hometeam " + gamestate.ballPosition + " yard line";
+    if (gamestate.ballAbsolutePosition < 50) {
+      return (
+        "ball at hometeam " + gamestate.ballAbsolutePosition + " yard line"
+      );
     }
-    if (gamestate.ballPosition > 50) {
-      return "ball at hometeam " + 100 - gamestate.ballPosition + " yard line";
+    if (gamestate.ballAbsolutePosition > 50) {
+      return (
+        "ball at hometeam " +
+        100 -
+        gamestate.ballAbsolutePosition +
+        " yard line"
+      );
     } else {
       return "ball at 50 yard line";
     }
@@ -81,13 +92,16 @@ export function useNflGame() {
           gamestate.time -= 4;
         } else if (0.9 < random && random < 0.92) {
           playResult = "interception";
-          gamestate.time -= 4;
+          gamestate.time -= 6;
+          const defenseReturnedYards = getTurnoverReturnYards();
         } else if (0.92 < random && random < 0.94) {
           playResult = "fumble";
           gamestate.time -= 6;
+          const defenseReturnedYards = getTurnoverReturnYards();
         } else {
           playResult = "sack";
           gamestate.time -= 34;
+          const lostYards = getRandomYardsInRange(-9, -2);
         }
       }
     }
